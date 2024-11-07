@@ -1,4 +1,4 @@
-Filament Dryer Controller  
+3D Printer Filament Dryer Controller  
 =========================================
 
 A project based on ESP32 & TFT TouchScreen to control heater for a DIY 3D Printer filament dryer.
@@ -11,3 +11,4 @@ Node-RED is used to intercat with MQTT data and commands.
 
 
 
+![screenshot](docs/screenshot1.png)
