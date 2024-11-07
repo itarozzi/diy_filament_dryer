@@ -10,6 +10,7 @@ extern "C" {
 typedef struct _objects_t {
     lv_obj_t *main;
     lv_obj_t *button_mode;
+    lv_obj_t *label_mode;
     lv_obj_t *button_settings;
     lv_obj_t *label_wifi;
     lv_obj_t *label_mqtt;

@@ -20,6 +20,8 @@ enum FlowGlobalVariables {
 
 // Native global variables
 
+extern int32_t get_var_mode();
+extern void set_var_mode(int32_t value);
 
 
 #ifdef __cplusplus

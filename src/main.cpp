@@ -36,6 +36,12 @@
 //#include "ui/actions.h"
 //#include "ui/images.h"
 
+
+//************* EEZ-Studio Native global variables  *************
+int32_t mode;
+bool running;
+
+
 //************* TFT display and includes  *************
 
 #include <TFT_eSPI.h>
@@ -95,6 +101,28 @@ TFT_eSPI tft = TFT_eSPI();
 //   // Cheap Yellow Display built-in RGB LED is controlled with inverted logic
 //   digitalWrite(CYD_LED_BLUE, value ? LOW : HIGH);
 // }
+
+
+
+bool get_var_running() {
+    return running;
+}
+
+void set_var_running(bool value) {
+    running = value;
+}
+
+
+int32_t get_var_mode() {
+    return mode;
+}
+
+void set_var_mode(int32_t value) {
+    mode = value;
+
+    Serial.print("Set Mode: ");
+    Serial.println(mode);
+}
 
 
 // If logging is enabled, it will inform the user about what is happening in the library
