@@ -40,6 +40,10 @@
 //************* EEZ-Studio Native global variables  *************
 int32_t mode;
 bool running;
+bool wifi_connected;
+bool mqtt_connected;
+float current_temp;
+
 
 
 //************* TFT display and includes  *************
@@ -73,6 +77,8 @@ TFT_eSPI tft = TFT_eSPI();
 
 
 
+
+
 // ** Define your action here **
 
 // If you define custom action to change pages, then you can use these
@@ -102,6 +108,32 @@ TFT_eSPI tft = TFT_eSPI();
 //   digitalWrite(CYD_LED_BLUE, value ? LOW : HIGH);
 // }
 
+
+float get_var_current_temp() {
+    return current_temp;
+}
+
+void set_var_current_temp(float value) {
+    current_temp = value;
+}
+
+
+bool get_var_mqtt_connected() {
+    return mqtt_connected;
+}
+
+void set_var_mqtt_connected(bool value) {
+    mqtt_connected = value;
+}
+
+
+bool get_var_wifi_connected() {
+    return wifi_connected;
+}
+
+void set_var_wifi_connected(bool value) {
+    wifi_connected = value;
+}
 
 
 bool get_var_running() {
@@ -233,12 +265,15 @@ void setup() {
 void loop() {
 
   static long last_ms = 0;
+  static float c_temp = 0.0;
 
   long now_ms = millis();
 
   // your task here or in callbacks
   // ...
 
+
+  current_temp = current_temp + 0.5;
 
   lv_task_handler();  // let the GUI do its work
   lv_tick_inc(now_ms - last_ms);     // tell LVGL how much time has passed

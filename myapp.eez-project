@@ -50,7 +50,7 @@
         {
           "objID": "d4f95758-9ae6-476b-9925-5bbbcd4e21ff",
           "fileName": "vars.h",
-          "template": "#ifndef EEZ_LVGL_UI_VARS_H\r\n#define EEZ_LVGL_UI_VARS_H\r\n\r\n#include <stdint.h>\r\n#include <stdbool.h>\r\n\r\n#ifdef __cplusplus\r\nextern \"C\" {\r\n#endif\r\n\r\n// enum declarations\r\n\r\n//${eez-studio FLOW_ENUMS}\r\n\r\n// Flow global variables\r\n\r\n//${eez-studio FLOW_GLOBAL_VARIABLES_ENUM}\r\n\r\n// Native global variables\r\n\r\n//${eez-studio LVGL_VARS_DECL}\r\n\r\n#ifdef __cplusplus\r\n}\r\n#endif\r\n\r\n#endif /*EEZ_LVGL_UI_VARS_H*/"
+          "template": "#ifndef EEZ_LVGL_UI_VARS_H\r\n#define EEZ_LVGL_UI_VARS_H\r\n\r\n#include <stdint.h>\r\n#include <stdbool.h>\r\n\r\n#ifdef __cplusplus\r\nextern \"C\" {\r\n#endif\r\n\r\n// enum declarations\r\n\r\n//${eez-studio FLOW_ENUMS}\r\n\r\n// Flow global variables\r\n\r\n//${eez-studio FLOW_GLOBAL_VARIABLES_ENUM}\r\n\r\n// Native global variables\r\n\r\n//${eez-studio LVGL_VARS_DECL}\r\n\r\n\r\n#ifdef __cplusplus\r\n}\r\n#endif\r\n\r\n#endif /*EEZ_LVGL_UI_VARS_H*/"
         },
         {
           "objID": "9f078edd-a3c0-41a1-d861-30801b97fdec",
@@ -125,6 +125,30 @@
         "name": "running",
         "type": "boolean",
         "defaultValue": "false",
+        "persistent": false,
+        "native": true
+      },
+      {
+        "objID": "6a8ae794-ea44-4952-af1d-673c044196f3",
+        "name": "wifiConnected",
+        "type": "boolean",
+        "defaultValue": "false",
+        "persistent": false,
+        "native": true
+      },
+      {
+        "objID": "20aa2d3e-e946-4897-f877-a199ca014c6e",
+        "name": "mqttConnected",
+        "type": "boolean",
+        "defaultValue": "false",
+        "persistent": false,
+        "native": true
+      },
+      {
+        "objID": "a69d448e-98ae-4b31-a6d1-aa14b39514eb",
+        "name": "currentTemp",
+        "type": "float",
+        "defaultValue": "0",
         "persistent": false,
         "native": true
       }
@@ -381,14 +405,15 @@
               "widthUnit": "content",
               "heightUnit": "content",
               "children": [],
-              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE|CHECKABLE",
               "hiddenFlagType": "literal",
               "clickableFlagType": "literal",
               "flagScrollbarMode": "",
               "flagScrollDirection": "",
               "scrollSnapX": "",
               "scrollSnapY": "",
-              "checkedStateType": "literal",
+              "checkedState": "wifiConnected",
+              "checkedStateType": "expression",
               "disabledStateType": "literal",
               "states": "",
               "localStyles": {
@@ -396,7 +421,11 @@
                 "definition": {
                   "MAIN": {
                     "DEFAULT": {
-                      "text_font": "MONTSERRAT_20"
+                      "text_font": "MONTSERRAT_20",
+                      "text_color": "#fafafa"
+                    },
+                    "CHECKED": {
+                      "text_color": "#00701d"
                     }
                   }
                 }
@@ -406,7 +435,7 @@
               "text": "LVGL.LV_SYMBOL_WIFI",
               "textType": "expression",
               "longMode": "WRAP",
-              "recolor": false
+              "recolor": true
             },
             {
               "objID": "da39741d-e448-4357-e2d9-cde6dbfcbe6b",
@@ -438,7 +467,8 @@
               "flagScrollDirection": "",
               "scrollSnapX": "",
               "scrollSnapY": "",
-              "checkedStateType": "literal",
+              "checkedState": "mqttConnected",
+              "checkedStateType": "expression",
               "disabledStateType": "literal",
               "states": "",
               "localStyles": {
@@ -447,7 +477,10 @@
                   "MAIN": {
                     "DEFAULT": {
                       "text_font": "MONTSERRAT_20",
-                      "text_color": "#24eb3f"
+                      "text_color": "#fafafa"
+                    },
+                    "CHECKED": {
+                      "text_color": "#00701d"
                     }
                   }
                 }
@@ -575,7 +608,7 @@
                   "left": 50,
                   "top": -2,
                   "width": 80,
-                  "height": 46,
+                  "height": 100,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -590,7 +623,7 @@
                   "leftUnit": "px",
                   "topUnit": "px",
                   "widthUnit": "px",
-                  "heightUnit": "content",
+                  "heightUnit": "%",
                   "children": [],
                   "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
                   "hiddenFlagType": "literal",
@@ -659,7 +692,7 @@
                   "left": 48,
                   "top": -3,
                   "width": 80,
-                  "height": 46,
+                  "height": 100,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -674,7 +707,7 @@
                   "leftUnit": "px",
                   "topUnit": "px",
                   "widthUnit": "px",
-                  "heightUnit": "content",
+                  "heightUnit": "%",
                   "children": [],
                   "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
                   "hiddenFlagType": "literal",
@@ -692,8 +725,8 @@
                   },
                   "group": "",
                   "groupIndex": 0,
-                  "text": "100",
-                  "textType": "literal",
+                  "text": "currentTemp",
+                  "textType": "expression",
                   "longMode": "WRAP",
                   "recolor": false
                 },
@@ -1401,20 +1434,6 @@
           "output": "True",
           "target": "de7176ae-8a8c-49b7-c4c3-8f04cdea420c",
           "input": "@seqin"
-        },
-        {
-          "objID": "eb91e6b2-4195-4084-f35e-25c1ebca7746",
-          "source": "de7176ae-8a8c-49b7-c4c3-8f04cdea420c",
-          "output": "@seqout",
-          "target": "38875647-f28f-44b7-ca33-6ac8bac1bab7",
-          "input": "current_mode"
-        },
-        {
-          "objID": "2d15a660-4357-43e5-c829-21ad5429b550",
-          "source": "049b8643-408b-49b9-9a1f-a3f2d931ec68",
-          "output": "False",
-          "target": "38875647-f28f-44b7-ca33-6ac8bac1bab7",
-          "input": "current_mode"
         },
         {
           "objID": "04bd9488-e1c8-44ff-b457-6184090f237c",

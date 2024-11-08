@@ -22,6 +22,15 @@ enum FlowGlobalVariables {
 
 extern int32_t get_var_mode();
 extern void set_var_mode(int32_t value);
+extern bool get_var_running();
+extern void set_var_running(bool value);
+extern bool get_var_wifi_connected();
+extern void set_var_wifi_connected(bool value);
+extern bool get_var_mqtt_connected();
+extern void set_var_mqtt_connected(bool value);
+extern float get_var_current_temp();
+extern void set_var_current_temp(float value);
+
 
 
 #ifdef __cplusplus
