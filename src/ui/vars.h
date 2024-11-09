@@ -30,6 +30,8 @@ extern bool get_var_mqtt_connected();
 extern void set_var_mqtt_connected(bool value);
 extern float get_var_current_temp();
 extern void set_var_current_temp(float value);
+extern float get_var_current_humi();
+extern void set_var_current_humi(float value);
 
 
 

@@ -151,6 +151,14 @@
         "defaultValue": "0",
         "persistent": false,
         "native": true
+      },
+      {
+        "objID": "068365c5-df01-4b5a-cdcf-bf8d98fc3967",
+        "name": "currentHumi",
+        "type": "float",
+        "defaultValue": "0",
+        "persistent": false,
+        "native": true
       }
     ],
     "structures": [],
@@ -641,8 +649,8 @@
                   },
                   "group": "",
                   "groupIndex": 0,
-                  "text": "100",
-                  "textType": "literal",
+                  "text": "currentHumi",
+                  "textType": "expression",
                   "longMode": "WRAP",
                   "recolor": false
                 }
@@ -725,7 +733,7 @@
                   },
                   "group": "",
                   "groupIndex": 0,
-                  "text": "currentTemp",
+                  "text": "currentHumi",
                   "textType": "expression",
                   "longMode": "WRAP",
                   "recolor": false

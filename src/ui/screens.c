@@ -141,18 +141,18 @@ void create_screen_main() {
                 }
                 {
                     lv_obj_t *obj = lv_img_create(parent_obj);
-                    lv_obj_set_pos(obj, -10, -10);
+                    lv_obj_set_pos(obj, -15, -10);
                     lv_obj_set_size(obj, 60, 60);
                     lv_img_set_src(obj, &img_humidity);
-                    lv_img_set_zoom(obj, 180);
+                    lv_img_set_zoom(obj, 160);
                 }
                 {
                     // labelHumi
                     lv_obj_t *obj = lv_label_create(parent_obj);
                     objects.label_humi = obj;
-                    lv_obj_set_pos(obj, 50, -2);
-                    lv_obj_set_size(obj, 80, LV_PCT(100));
-                    lv_label_set_text(obj, "100");
+                    lv_obj_set_pos(obj, 48, -2);
+                    lv_obj_set_size(obj, 90, LV_PCT(100));
+                    lv_label_set_text(obj, "");
                     add_style_sensor_main(obj);
                 }
             }
@@ -168,8 +168,8 @@ void create_screen_main() {
                     // labelTemp
                     lv_obj_t *obj = lv_label_create(parent_obj);
                     objects.label_temp = obj;
-                    lv_obj_set_pos(obj, 48, -3);
-                    lv_obj_set_size(obj, 80, LV_PCT(100));
+                    lv_obj_set_pos(obj, 39, 2);
+                    lv_obj_set_size(obj, 90, LV_PCT(100));
                     lv_label_set_text(obj, "");
                     add_style_sensor_main(obj);
                 }
@@ -183,10 +183,10 @@ void create_screen_main() {
                 }
                 {
                     lv_obj_t *obj = lv_img_create(parent_obj);
-                    lv_obj_set_pos(obj, -10, -10);
+                    lv_obj_set_pos(obj, -15, -10);
                     lv_obj_set_size(obj, 60, 60);
                     lv_img_set_src(obj, &img_temperature);
-                    lv_img_set_zoom(obj, 180);
+                    lv_img_set_zoom(obj, 160);
                 }
             }
         }
@@ -349,6 +349,15 @@ void tick_screen_main() {
         if (strcmp(new_val, cur_val) != 0) {
             tick_value_change_obj = objects.label_mqtt;
             lv_label_set_text(objects.label_mqtt, new_val);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        const char *new_val = evalTextProperty(flowState, 10, 3, "Failed to evaluate Text in Label widget");
+        const char *cur_val = lv_label_get_text(objects.label_humi);
+        if (strcmp(new_val, cur_val) != 0) {
+            tick_value_change_obj = objects.label_humi;
+            lv_label_set_text(objects.label_humi, new_val);
             tick_value_change_obj = NULL;
         }
     }

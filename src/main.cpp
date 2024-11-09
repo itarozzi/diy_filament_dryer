@@ -12,11 +12,11 @@
   Lib dependencies
   -----------------
 
-  - "XPT2046_Touchscreen" library by Paul Stoffregen to use the Touchscreen - https://github.com/PaulStoffregen/XPT2046_Touchscreen 
-  - "TFT_eSPI" library by Bodmer to use the TFT display - https://github.com/Bodmer/TFT_eSPI
-  - "lvgl" library by LVGL - https://github.com/lvgl/lvgl
-
-
+  - XPT2046_Touchscreen by Paul Stoffregen to use the Touchscreen - https://github.com/PaulStoffregen/XPT2046_Touchscreen 
+  - TFT_eSPI by Bodmer to use the TFT display - https://github.com/Bodmer/TFT_eSPI
+  - lvgl  by LVGL - https://github.com/lvgl/lvgl
+  - BME280_Light by Tomasz 'Zen' Napierala
+  
 */
 
 #include <Arduino.h>
@@ -33,6 +33,9 @@
 #define CYD_LED_BLUE 17
 
 
+
+
+
 //************* lvgl and UI includes  *************
 #include <lvgl.h>
 #include "ui/ui.h"
@@ -40,6 +43,10 @@
 //#include "ui/actions.h"
 //#include "ui/images.h"
 
+
+#include <Wire.h>    
+                                                   // required by BME280 library
+#include <BME280_t.h>
 
 //************* TFT display and includes  *************
 
@@ -72,6 +79,8 @@ uint32_t draw_buf[DRAW_BUF_SIZE / 4];
 TFT_eSPI tft = TFT_eSPI();
 // ******************
 
+// Temperature and humidity sensor
+BME280<> BMESensor;    
 
 //************* EEZ-Studio Native global variables  *************
 int32_t mode;
@@ -79,6 +88,7 @@ bool running;
 bool wifi_connected;
 bool mqtt_connected;
 float current_temp;
+float current_humi;
 
 
 // ** Define your action here **
@@ -110,6 +120,14 @@ float current_temp;
 //   digitalWrite(CYD_LED_BLUE, value ? LOW : HIGH);
 // }
 
+
+float get_var_current_humi() {
+    return current_humi;
+}
+
+void set_var_current_humi(float value) {
+    current_humi = value;
+}
 
 float get_var_current_temp() {
     return current_temp;
@@ -215,8 +233,8 @@ void lv_init_esp32(void) {
 //   tft.init();  
   
   // set rotation mode
-  // lv_display_set_rotation(NULL, LV_DISPLAY_ROTATION_0);
-  tft.setRotation(3);  // 0 or 2 for  portrait / 1 or 3 for landscape
+  //lv_display_set_rotation(NULL, LV_DISPLAY_ROTATION_90);
+   tft.setRotation(3);  // 0 or 2 for  portrait / 1 or 3 for landscape
 
 
 
@@ -254,7 +272,9 @@ void setup() {
   // digitalWrite(CYD_LED_RED, HIGH);
 
   
-
+  // Initialize BME280 sensor
+  // Wire.begin(0,2);                                                      // initialize I2C that connects to sensor
+  BMESensor.begin();   
 
 
   // Start LVGL
@@ -269,7 +289,32 @@ void setup() {
 
 }
 
+#define ASCII_ESC 27
 
+#define MYALTITUDE  150.50
+
+char bufout[10];
+
+void read_sensor() {
+  BMESensor.refresh();    
+  
+  current_temp = BMESensor.temperature;
+  current_humi = BMESensor.humidity;
+  
+  /*                                              // read current sensor data
+  sprintf(bufout,"%c[1;0H",ASCII_ESC);
+  Serial.print(bufout);
+
+  Serial.print("Temperature: ");
+  Serial.print(BMESensor.temperature);                                  // display temperature in Celsius
+  Serial.println("C");
+
+  Serial.print("Humidity:    ");
+  Serial.print(BMESensor.humidity);                                     // display humidity in %   
+  Serial.println("%");
+  */
+  
+}
 
 void loop() {
 
@@ -277,6 +322,10 @@ void loop() {
   static float c_temp = 0.0;
 
   long now_ms = millis();
+
+
+  read_sensor();
+
 
   // your task here or in callbacks
   // ...

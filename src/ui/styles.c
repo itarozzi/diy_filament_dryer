@@ -9,7 +9,7 @@
 //
 
 void init_style_sensor_main_MAIN_DEFAULT(lv_style_t *style) {
-    lv_style_set_text_font(style, &lv_font_montserrat_42);
+    lv_style_set_text_font(style, &lv_font_montserrat_40);
     lv_style_set_text_align(style, LV_TEXT_ALIGN_RIGHT);
 };
 
