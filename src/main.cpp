@@ -1,10 +1,12 @@
 /*
-  ESP32-CYD LVGL Boilerplate
-  ==========================
+  3D Printer Filament Dryer Controller  
+  ====================================
 
   Ivan Tarozzi (itarozzi@gmail.com) 2024
 
 
+
+  UI built with EEZ-Studio and EEZ-Flow
 
 
   Lib dependencies
@@ -13,6 +15,8 @@
   - "XPT2046_Touchscreen" library by Paul Stoffregen to use the Touchscreen - https://github.com/PaulStoffregen/XPT2046_Touchscreen 
   - "TFT_eSPI" library by Bodmer to use the TFT display - https://github.com/Bodmer/TFT_eSPI
   - "lvgl" library by LVGL - https://github.com/lvgl/lvgl
+
+
 */
 
 #include <Arduino.h>
@@ -37,15 +41,6 @@
 //#include "ui/images.h"
 
 
-//************* EEZ-Studio Native global variables  *************
-int32_t mode;
-bool running;
-bool wifi_connected;
-bool mqtt_connected;
-float current_temp;
-
-
-
 //************* TFT display and includes  *************
 
 #include <TFT_eSPI.h>
@@ -53,16 +48,18 @@ float current_temp;
 
 // Touchscreen pins
 #define XPT2046_IRQ 36   // T_IRQ
-#define XPT2046_MOSI 32  // T_DIN
 #define XPT2046_MISO 39  // T_OUT
-#define XPT2046_CLK 25   // T_CLK
+#define XPT2046_MOSI 32  // T_DIN
 #define XPT2046_CS 33    // T_CS
+#define XPT2046_CLK 25   // T_CLK
 
 SPIClass touchscreenSPI = SPIClass(VSPI);
 XPT2046_Touchscreen touchscreen(XPT2046_CS, XPT2046_IRQ);
 
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
+
+#define TFT_GREY 0x5AEB // New colour
 
 // Touchscreen coordinates: (x, y) and pressure (z)
 int x, y, z;
@@ -76,7 +73,12 @@ TFT_eSPI tft = TFT_eSPI();
 // ******************
 
 
-
+//************* EEZ-Studio Native global variables  *************
+int32_t mode;
+bool running;
+bool wifi_connected;
+bool mqtt_connected;
+float current_temp;
 
 
 // ** Define your action here **
@@ -167,7 +169,8 @@ void log_print(lv_log_level_t level, const char * buf) {
 // Get the Touchscreen data
 void touchscreen_read(lv_indev_t * indev, lv_indev_data_t * data) {
   // Checks if Touchscreen was touched, and prints X, Y and Pressure (Z)
-  if(touchscreen.tirqTouched() && touchscreen.touched()) {
+  // if(touchscreen.tirqTouched() && touchscreen.touched()) {
+    if (touchscreen.touched()) {
     // Get Touchscreen points
     TS_Point p = touchscreen.getPoint();
     // Calibrate Touchscreen points with map function to the correct width and height
@@ -180,8 +183,9 @@ void touchscreen_read(lv_indev_t * indev, lv_indev_data_t * data) {
     // Set the coordinates
     data->point.x = x;
     data->point.y = y;
-    // String touch_data = "X = " + String(x) + "  Y = " + String(y) + "  Z = " + String(z);
-    // Serial.println(touch_data);
+    String touch_data = "X = " + String(x) + "  Y = " + String(y) + "  Z = " + String(z);
+    Serial.println(touch_data);
+  
   }
   else {
     data->state = LV_INDEV_STATE_RELEASED;
@@ -192,23 +196,28 @@ void touchscreen_read(lv_indev_t * indev, lv_indev_data_t * data) {
 // lvgl initialization for esp32 board
 void lv_init_esp32(void) {
 
-  // Register print function for debugging
+  // // Register print function for debugging
   lv_log_register_print_cb(log_print);
 
   // Start the SPI for the touchscreen and init the touchscreen
   touchscreenSPI.begin(XPT2046_CLK, XPT2046_MISO, XPT2046_MOSI, XPT2046_CS);
   
   touchscreen.begin(touchscreenSPI);
-  // Set the Touchscreen rotation in portrait mode
-  touchscreen.setRotation(3);  // 2:vertical / 3:horizontal
+  
+  // Set the Touchscreen rotation 
+  touchscreen.setRotation(1);  // 2:vertical / 1|3:horizontal
 
   // Create a display object
   lv_display_t * disp;
   // Initialize the TFT display using the TFT_eSPI library
   disp = lv_tft_espi_create(SCREEN_WIDTH, SCREEN_HEIGHT, draw_buf, sizeof(draw_buf));
+
+//   tft.init();  
   
   // set rotation mode
+  // lv_display_set_rotation(NULL, LV_DISPLAY_ROTATION_0);
   tft.setRotation(3);  // 0 or 2 for  portrait / 1 or 3 for landscape
+
 
 
   // Initialize an LVGL input device object (Touchscreen)
@@ -236,22 +245,22 @@ void setup() {
   Serial.println(SW_NAME_REV);
   Serial.println(LVGL_Arduino);
 
-  pinMode(CYD_LED_RED, OUTPUT);
-  pinMode(CYD_LED_GREEN, OUTPUT);
-  pinMode(CYD_LED_BLUE, OUTPUT);
+  // pinMode(CYD_LED_RED, OUTPUT);
+  // pinMode(CYD_LED_GREEN, OUTPUT);
+  // pinMode(CYD_LED_BLUE, OUTPUT);
 
-  digitalWrite(CYD_LED_BLUE, HIGH);
-  digitalWrite(CYD_LED_GREEN, HIGH);
-  digitalWrite(CYD_LED_RED, HIGH);
+  // digitalWrite(CYD_LED_BLUE, HIGH);
+  // digitalWrite(CYD_LED_GREEN, HIGH);
+  // digitalWrite(CYD_LED_RED, HIGH);
 
   
 
 
 
-  // // Start LVGL
+  // Start LVGL
   lv_init();
 
-  // // Init TFT and Touch for esp32
+  // Init TFT and Touch for esp32
   lv_init_esp32();
 
 
@@ -273,7 +282,7 @@ void loop() {
   // ...
 
 
-  current_temp = current_temp + 0.5;
+  // current_temp = current_temp + 0.5;
 
   lv_task_handler();  // let the GUI do its work
   lv_tick_inc(now_ms - last_ms);     // tell LVGL how much time has passed
