@@ -20,6 +20,38 @@
 */
 
 #include <Arduino.h>
+// #include <WiFi.h>
+#include "MqttController.h"
+
+#if __has_include("credentials.h")
+  #include "credentials.h"
+#endif
+// Create a file called credentials.h with the following content (don't push to github, see .gitignore):
+// #define WIFI_SSID "MYSSID"
+// #define WIFI_PASSWORD "MYPASSWORD"
+// #define MQTT_BROKER "MQTTIPBROKER"
+// #define MQTT_PORT 1883
+// #define MQTT_USER "MQTTUSER"   no auth used if empty
+// #define MQTT_PASSWORD "MQTTPASSWORD"
+#ifndef WIFI_SSID
+#define WIFI_SSID "WiFi SSID"
+#endif
+
+#ifndef WIFI_PASSWORD
+#define WIFI_PASSWORD "password"
+#endif
+
+#ifndef MQTT_BROKER
+#define MQTT_BROKER "broker_ip"
+#define MQTT_PORT "1883"
+#endif
+
+#ifndef MQTT_USER
+#define MQTT_USER ""   
+#define MQTT_PASSWORD ""
+#endif
+
+#define MQTT_BASE_TOPIC "itlab/dryer"
 
 #define SW_NAME_REV "MyApp v1.0"
 
@@ -31,8 +63,6 @@
 #define CYD_LED_RED 4
 #define CYD_LED_GREEN 16
 #define CYD_LED_BLUE 17
-
-
 
 
 
@@ -81,6 +111,8 @@ TFT_eSPI tft = TFT_eSPI();
 
 // Temperature and humidity sensor
 BME280<> BMESensor;    
+
+MqttController mqttController(MQTT_BROKER, MQTT_PORT, MQTT_USER, MQTT_PASSWORD, MQTT_BASE_TOPIC);
 
 //************* EEZ-Studio Native global variables  *************
 int32_t mode;
@@ -287,6 +319,39 @@ void setup() {
   // Integrate EEZ Studio GUI
   ui_init();
 
+  // Connect to WiFi and Broker
+  mqttController.connectWifi(WIFI_SSID, WIFI_PASSWORD);
+
+/*
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+
+
+  unsigned long startAttemptTime = millis();  // Momento in cui inizia il tentativo di connessione
+  unsigned long timeoutPeriod = 15000;         // Tempo di attesa massimo in millisecondi (5 secondi)
+
+  Serial.println("wait...");
+
+  // Prova a connetterti alla rete WiFi fino al raggiungimento del timeout
+  while (WiFi.status() != WL_CONNECTED && millis() - startAttemptTime < timeoutPeriod) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+
+  // Controlla se la connessione ha avuto successo
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.println("Connessione Wi-Fi stabilita");
+    Serial.println("Indirizzo IP:");
+    Serial.println(WiFi.localIP());
+    wifi_connected = true;
+  } else {
+    wifi_connected = false;
+    Serial.println("Impossibile connettersi al WiFi entro il tempo specificato");
+    // Qui puoi gestire il caso di mancata connessione, 
+    // ad esempio provare a connetterti di nuovo in un secondo momento
+  }
+*/
 }
 
 #define ASCII_ESC 27
@@ -317,21 +382,42 @@ void read_sensor() {
 }
 
 void loop() {
+  const int SENSORS_POLLING_INTERVAL = 2000; // ms
+  static long last_sensor_polling = 0;
+
+  const int PUSH_DATA_INTERVAL = 2000; // ms
+  static long last_push_data = 0;
 
   static long last_ms = 0;
   static float c_temp = 0.0;
 
   long now_ms = millis();
 
+  if (now_ms - last_sensor_polling > SENSORS_POLLING_INTERVAL) {
+    #ifndef IGNORE_SENSORS
+    read_sensor();
+    #else
+    current_temp = rand() % 100;
+    current_humi = rand() % 100;
+    #endif
 
-  read_sensor();
+    mqttController.pushSensors(current_temp, current_humi);
+
+    last_sensor_polling = now_ms;
+  }
 
 
-  // your task here or in callbacks
-  // ...
+
+  // Tick the mqtt controller to process connections and pub/subs
+  mqttController.tick();
+
+  mqttController.getConnectionStatus(&wifi_connected, &mqtt_connected);
 
 
-  // current_temp = current_temp + 0.5;
+  if (now_ms - last_push_data > PUSH_DATA_INTERVAL) {
+    mqttController.pushData(mode, 0, 0, 0, 0, 0);
+    last_push_data = now_ms;
+  }
 
   lv_task_handler();  // let the GUI do its work
   lv_tick_inc(now_ms - last_ms);     // tell LVGL how much time has passed
