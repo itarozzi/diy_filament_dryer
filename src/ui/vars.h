@@ -26,8 +26,6 @@ enum FlowGlobalVariables {
 
 // Native global variables
 
-extern int32_t get_var_mode();
-extern void set_var_mode(int32_t value);
 extern bool get_var_running();
 extern void set_var_running(bool value);
 extern bool get_var_wifi_connected();
@@ -46,6 +44,8 @@ extern int32_t get_var_pwm_led();
 extern void set_var_pwm_led(int32_t value);
 extern RegulationModes get_var_reg_mode();
 extern void set_var_reg_mode(RegulationModes value);
+extern int32_t get_var_reg_target();
+extern void set_var_reg_target(int32_t value);
 
 
 

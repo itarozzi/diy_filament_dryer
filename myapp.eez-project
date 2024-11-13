@@ -113,14 +113,6 @@
         "persistent": false
       },
       {
-        "objID": "df279fbb-4ad8-4a0e-8c7c-8b56999b9bd2",
-        "name": "mode",
-        "type": "integer",
-        "defaultValue": "0",
-        "persistent": false,
-        "native": true
-      },
-      {
         "objID": "29ebc1a6-973b-4863-cb92-253d8a7ac664",
         "name": "running",
         "type": "boolean",
@@ -189,6 +181,14 @@
         "name": "reg_mode",
         "type": "enum:RegulationModes",
         "defaultValue": "RegulationModes.REG_OFF",
+        "persistent": false,
+        "native": true
+      },
+      {
+        "objID": "066206a8-7feb-415d-d641-d573bbb89562",
+        "name": "reg_target",
+        "type": "integer",
+        "defaultValue": "0",
         "persistent": false,
         "native": true
       }
@@ -332,7 +332,7 @@
                   },
                   "group": "",
                   "groupIndex": 0,
-                  "text": "(mode==0)?LVGL.LV_SYMBOL_POWER + \"  OFF\" : (mode==1)? LVGL.LV_SYMBOL_LOOP + \"  CTRL TEMP\" : (mode==2)? LVGL.LV_SYMBOL_TINT + \"  CTRL HUMI\" : LVGL.LV_SYMBOL_SHUFFLE + \"  CTRL REMOTE\"",
+                  "text": "(reg_mode==0)?LVGL.LV_SYMBOL_POWER + \"  OFF\" : (reg_mode==1)? LVGL.LV_SYMBOL_LOOP + \"  CTRL TEMP\" : (reg_mode==2)? LVGL.LV_SYMBOL_TINT + \"  CTRL HUMI\" : LVGL.LV_SYMBOL_SHUFFLE + \"  CTRL REMOTE\"",
                   "textType": "expression",
                   "longMode": "DOT",
                   "recolor": false
@@ -996,7 +996,7 @@
                   "left": -12,
                   "top": 27,
                   "width": 110,
-                  "height": 35,
+                  "height": 37,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -1011,7 +1011,7 @@
                   "leftUnit": "px",
                   "topUnit": "px",
                   "widthUnit": "px",
-                  "heightUnit": "content",
+                  "heightUnit": "px",
                   "children": [],
                   "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
                   "hiddenFlagType": "literal",
@@ -1036,8 +1036,8 @@
                   },
                   "group": "",
                   "groupIndex": 0,
-                  "text": "100 °C",
-                  "textType": "literal",
+                  "text": "(reg_mode==1)? (reg_target + \"°C\") : (reg_mode==2) ? reg_target + \"%\"):\"\"",
+                  "textType": "expression",
                   "longMode": "WRAP",
                   "recolor": false
                 },
@@ -1090,7 +1090,7 @@
                   "left": -7,
                   "top": 13,
                   "width": 100,
-                  "height": 15,
+                  "height": 18,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -1104,7 +1104,7 @@
                   "leftUnit": "px",
                   "topUnit": "px",
                   "widthUnit": "px",
-                  "heightUnit": "content",
+                  "heightUnit": "px",
                   "children": [],
                   "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
                   "hiddenFlagType": "literal",
@@ -1129,8 +1129,8 @@
                   },
                   "group": "",
                   "groupIndex": 0,
-                  "text": "TEMP",
-                  "textType": "literal",
+                  "text": "(reg_mode == 1)?\"TEMP\":(reg_mode == 2)?\"HUMI\":\"\"",
+                  "textType": "expression",
                   "longMode": "WRAP",
                   "recolor": false
                 }
@@ -1165,7 +1165,7 @@
               "type": "LVGLLabelWidget",
               "left": 373,
               "top": 52,
-              "width": 53,
+              "width": 85,
               "height": 16,
               "customInputs": [],
               "customOutputs": [],
@@ -1197,7 +1197,7 @@
               },
               "group": "",
               "groupIndex": 0,
-              "text": "mode",
+              "text": "reg_mode",
               "textType": "expression",
               "longMode": "WRAP",
               "recolor": false
@@ -1230,7 +1230,7 @@
                   "left": 4,
                   "top": 54,
                   "width": 50,
-                  "height": 16,
+                  "height": 48,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -1263,8 +1263,8 @@
                   },
                   "group": "",
                   "groupIndex": 0,
-                  "text": "100%",
-                  "textType": "literal",
+                  "text": "pwm_heater",
+                  "textType": "expression",
                   "longMode": "WRAP",
                   "recolor": false
                 },
@@ -1274,7 +1274,7 @@
                   "left": 59,
                   "top": 54,
                   "width": 50,
-                  "height": 16,
+                  "height": 32,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -1307,8 +1307,8 @@
                   },
                   "group": "",
                   "groupIndex": 0,
-                  "text": "20%",
-                  "textType": "literal",
+                  "text": "pwm_fan",
+                  "textType": "expression",
                   "longMode": "WRAP",
                   "recolor": false
                 },
@@ -1447,15 +1447,15 @@
           "type": "SetVariableActionComponent",
           "left": 158,
           "top": 331,
-          "width": 128,
+          "width": 177,
           "height": 57,
           "customInputs": [],
           "customOutputs": [],
           "entries": [
             {
               "objID": "b836c056-979a-41a1-e91f-294729741279",
-              "variable": "mode",
-              "value": "mode+1"
+              "variable": "reg_mode",
+              "value": "reg_mode+1"
             }
           ]
         },
@@ -1464,7 +1464,7 @@
           "type": "IsTrueActionComponent",
           "left": 356,
           "top": 325,
-          "width": 139,
+          "width": 163,
           "height": 70,
           "customInputs": [
             {
@@ -1474,21 +1474,21 @@
             }
           ],
           "customOutputs": [],
-          "value": "mode > 3"
+          "value": "reg_mode > 3"
         },
         {
           "objID": "de7176ae-8a8c-49b7-c4c3-8f04cdea420c",
           "type": "SetVariableActionComponent",
           "left": 567,
           "top": 350,
-          "width": 99,
+          "width": 122,
           "height": 57,
           "customInputs": [],
           "customOutputs": [],
           "entries": [
             {
               "objID": "f3973156-4917-47c2-fdfd-37945ce5c60e",
-              "variable": "mode",
+              "variable": "reg_mode",
               "value": "0"
             }
           ]

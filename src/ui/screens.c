@@ -216,8 +216,8 @@ void create_screen_main() {
                     lv_obj_t *obj = lv_label_create(parent_obj);
                     objects.label_target = obj;
                     lv_obj_set_pos(obj, -12, 27);
-                    lv_obj_set_size(obj, 110, LV_SIZE_CONTENT);
-                    lv_label_set_text(obj, "100 °C");
+                    lv_obj_set_size(obj, 110, 37);
+                    lv_label_set_text(obj, "");
                     add_style_target(obj);
                     lv_obj_set_style_text_font(obj, &lv_font_montserrat_32, LV_PART_MAIN | LV_STATE_DEFAULT);
                 }
@@ -230,9 +230,10 @@ void create_screen_main() {
                 }
                 {
                     lv_obj_t *obj = lv_label_create(parent_obj);
+                    objects.obj1 = obj;
                     lv_obj_set_pos(obj, -7, 13);
-                    lv_obj_set_size(obj, 100, LV_SIZE_CONTENT);
-                    lv_label_set_text(obj, "TEMP");
+                    lv_obj_set_size(obj, 100, 18);
+                    lv_label_set_text(obj, "");
                     add_style_target(obj);
                     lv_obj_set_style_text_font(obj, &lv_font_montserrat_12, LV_PART_MAIN | LV_STATE_DEFAULT);
                 }
@@ -240,7 +241,7 @@ void create_screen_main() {
         }
         {
             lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.obj1 = obj;
+            objects.obj2 = obj;
             lv_obj_set_pos(obj, 373, 52);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_label_set_text(obj, "");
@@ -265,7 +266,7 @@ void create_screen_main() {
                     objects.label_pwm_heater = obj;
                     lv_obj_set_pos(obj, 4, 54);
                     lv_obj_set_size(obj, 50, LV_SIZE_CONTENT);
-                    lv_label_set_text(obj, "100%");
+                    lv_label_set_text(obj, "");
                     add_style_pwm(obj);
                 }
                 {
@@ -274,7 +275,7 @@ void create_screen_main() {
                     objects.label_pwm_fan = obj;
                     lv_obj_set_pos(obj, 59, 54);
                     lv_obj_set_size(obj, 50, LV_SIZE_CONTENT);
-                    lv_label_set_text(obj, "20%");
+                    lv_label_set_text(obj, "");
                     add_style_pwm(obj);
                 }
                 {
@@ -374,11 +375,47 @@ void tick_screen_main() {
         }
     }
     {
-        const char *new_val = evalTextProperty(flowState, 20, 3, "Failed to evaluate Text in Label widget");
+        const char *new_val = evalTextProperty(flowState, 17, 3, "Failed to evaluate Text in Label widget");
+        const char *cur_val = lv_label_get_text(objects.label_target);
+        if (strcmp(new_val, cur_val) != 0) {
+            tick_value_change_obj = objects.label_target;
+            lv_label_set_text(objects.label_target, new_val);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        const char *new_val = evalTextProperty(flowState, 19, 3, "Failed to evaluate Text in Label widget");
         const char *cur_val = lv_label_get_text(objects.obj1);
         if (strcmp(new_val, cur_val) != 0) {
             tick_value_change_obj = objects.obj1;
             lv_label_set_text(objects.obj1, new_val);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        const char *new_val = evalTextProperty(flowState, 20, 3, "Failed to evaluate Text in Label widget");
+        const char *cur_val = lv_label_get_text(objects.obj2);
+        if (strcmp(new_val, cur_val) != 0) {
+            tick_value_change_obj = objects.obj2;
+            lv_label_set_text(objects.obj2, new_val);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        const char *new_val = evalTextProperty(flowState, 22, 3, "Failed to evaluate Text in Label widget");
+        const char *cur_val = lv_label_get_text(objects.label_pwm_heater);
+        if (strcmp(new_val, cur_val) != 0) {
+            tick_value_change_obj = objects.label_pwm_heater;
+            lv_label_set_text(objects.label_pwm_heater, new_val);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        const char *new_val = evalTextProperty(flowState, 23, 3, "Failed to evaluate Text in Label widget");
+        const char *cur_val = lv_label_get_text(objects.label_pwm_fan);
+        if (strcmp(new_val, cur_val) != 0) {
+            tick_value_change_obj = objects.label_pwm_fan;
+            lv_label_set_text(objects.label_pwm_fan, new_val);
             tick_value_change_obj = NULL;
         }
     }
@@ -389,7 +426,7 @@ extern void add_style(lv_obj_t *obj, int32_t styleIndex);
 extern void remove_style(lv_obj_t *obj, int32_t styleIndex);
 
 static const char *screen_names[] = { "Main" };
-static const char *object_names[] = { "main", "button_mode", "label_wifi", "label_mqtt", "label_mode", "button_settings", "label_humi", "label_temp", "label_time", "label_target", "label_pwm_heater", "label_pwm_fan", "obj0", "obj1" };
+static const char *object_names[] = { "main", "button_mode", "label_wifi", "label_mqtt", "label_mode", "button_settings", "label_humi", "label_temp", "label_time", "label_target", "label_pwm_heater", "label_pwm_fan", "obj0", "obj1", "obj2" };
 static const char *style_names[] = { "sensorMain", "sensorUm", "pwm", "buttonMode", "target" };
 
 void create_screens() {

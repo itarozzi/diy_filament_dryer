@@ -122,7 +122,6 @@ MqttController mqttController(MQTT_BROKER, MQTT_PORT, MQTT_USER, MQTT_PASSWORD, 
 //************* EEZ-Studio Native global variables  *************
 RegulationModes reg_mode;
 
-int32_t mode;
 int32_t pwm_heater;
 int32_t pwm_fan;
 int32_t pwm_led;
@@ -132,6 +131,8 @@ bool wifi_connected;
 bool mqtt_connected;
 float current_temp;
 float current_humi;
+
+int32_t reg_target;
 
 
 // ** Define your action here **
@@ -163,6 +164,13 @@ float current_humi;
 //   digitalWrite(CYD_LED_BLUE, value ? LOW : HIGH);
 // }
 
+int32_t get_var_reg_target() {
+    return reg_target;
+}
+
+void set_var_reg_target(int32_t value) {
+    reg_target = value;
+}
 
 
 RegulationModes get_var_reg_mode() {
@@ -244,16 +252,6 @@ void set_var_running(bool value) {
 }
 
 
-int32_t get_var_mode() {
-    return mode;
-}
-
-void set_var_mode(int32_t value) {
-    mode = value;
-
-    Serial.print("Set Mode: ");
-    Serial.println(mode);
-}
 
 
 // If logging is enabled, it will inform the user about what is happening in the library
@@ -370,6 +368,8 @@ void setup() {
       if (cmd_fan_pwm >=0) pwm_fan = cmd_fan_pwm;
       if (cmd_led_pwm >=0) pwm_led = cmd_led_pwm;
     }
+
+    Serial.println("cmd_mode: " + String(cmd_mode) + "  cmd_heater_pwm: " + String(pwm_heater) + "  cmd_fan_pwm: " + String(pwm_fan) + "  cmd_led_pwm: " + String(pwm_led));
   });
   
   mqttController.connectWifi(WIFI_SSID, WIFI_PASSWORD);
@@ -470,7 +470,7 @@ void loop() {
 
 
   if (now_ms - last_push_data > PUSH_DATA_INTERVAL) {
-    mqttController.pushData(mode, 0, 0, 0, 0, 0);
+    mqttController.pushData(reg_mode, 0, 0, 0, 0, 0);
     last_push_data = now_ms;
   }
 

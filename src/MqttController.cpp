@@ -86,14 +86,16 @@ void MqttController::tick() {
 }
 
 void MqttController::mqtt_subscribe() {
-    bool done = false;
-    int cmd_mode = -1;
-    int cmd_heater_pwm = -1;
-    int cmd_fan_pwm = -1;
-    int cmd_led_pwm = -1;
-    mqtt->subscribe(mqtt_base_topic + "/commands/#", [this, &done, &cmd_mode, &cmd_heater_pwm, &cmd_fan_pwm, &cmd_led_pwm](const char * topic, const char * payload) {
+
+    mqtt->subscribe(mqtt_base_topic + "/commands/#", [this](const char * topic, const char * payload) {
+        bool done = false;
+        int cmd_mode = -1;
+        int cmd_heater_pwm = -1;
+        int cmd_fan_pwm = -1;
+        int cmd_led_pwm = -1;
+
         // payload might be binary, but PicoMQTT guarantees that it's zero-terminated
-        Serial.printf("Received message in topic '%s': %s\n", topic, payload);
+        // Serial.printf("Received message in topic '%s': %s    - pwm %d  -   %d\n", topic, payload, cmd_heater_pwm, cmd_fan_pwm);
 
         // test if override mode command received
         String cmd_topic = this->mqtt_base_topic + "/commands/remote_mode_override";
@@ -134,11 +136,13 @@ void MqttController::mqtt_subscribe() {
             cmd_led_pwm = value = (value > 255) ? 255 : ((value < 0) ? 0 : value);
             done = true;
         }
+
+        if (done && remote_cmd_callback_) {
+            remote_cmd_callback_(cmd_mode, cmd_heater_pwm, cmd_fan_pwm, cmd_led_pwm);
+        }
+
     });
     
-    if (done && remote_cmd_callback_) {
-        remote_cmd_callback_(cmd_mode, cmd_heater_pwm, cmd_fan_pwm, cmd_led_pwm);
-    }
 }
 
 

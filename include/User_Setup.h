@@ -53,7 +53,7 @@
 //#define RPI_DISPLAY_TYPE // 20MHz maximum SPI
 
 // Only define one driver, the other ones must be commented out
-// #define ILI9341_DRIVER       // Generic driver for common displays
+//#define ILI9341_DRIVER       // Generic driver for common displays
 #define ILI9341_2_DRIVER     // Alternative ILI9341 driver, see https://github.com/Bodmer/TFT_eSPI/issues/1172
 //#define ST7735_DRIVER      // Define additional parameters below for this display
 //#define ILI9163_DRIVER     // Define additional parameters below for this display
@@ -123,8 +123,8 @@
 // If colours are inverted (white shows as black) then uncomment one of the next
 // 2 lines try both options, one of the options should correct the inversion.
 
-//#define TFT_INVERSION_ON
-//#define TFT_INVERSION_OFF
+#define TFT_INVERSION_ON
+// #define TFT_INVERSION_OFF
 
 
 // ##################################################################################
@@ -139,8 +139,8 @@
 // driven with a PWM signal or turned OFF/ON then this must be handled by the user
 // sketch. e.g. with digitalWrite(TFT_BL, LOW);
 
-//#define TFT_BL   25            // LED back-light control pin
-//#define TFT_BACKLIGHT_ON HIGH  // Level to turn ON back-light (HIGH or LOW)
+#define TFT_BL   21            // LED back-light control pin
+#define TFT_BACKLIGHT_ON HIGH  // Level to turn ON back-light (HIGH or LOW)
 
 
 
@@ -214,15 +214,15 @@
 // For ESP32 Dev board (only tested with ILI9341 display)
 // The hardware SPI can be mapped to any pins
 
-#define TFT_MISO 12
+#define TFT_MISO 16
 #define TFT_MOSI 13
 #define TFT_SCLK 14
-#define TFT_CS   27  // Chip select control pin
-#define TFT_DC    26  // Data Command control pin
+#define TFT_CS   15  // Chip select control pin
+#define TFT_DC    2  // Data Command control pin
 //#define TFT_RST   4  // Reset pin (could connect to RST pin)
-#define TFT_RST  -1  // Set TFT_RST to -1 if display RESET is connected to ESP32 board RST
+#define TFT_RST  12  // Set TFT_RST to -1 if display RESET is connected to ESP32 board RST
 
-//#define TOUCH_CS 33     // Chip select pin (T_CS) of touch screen
+#define TOUCH_CS 33     // Chip select pin (T_CS) of touch screen
 
 // For ESP32 Dev board (only tested with GC9A01 display)
 // The hardware SPI can be mapped to any pins
