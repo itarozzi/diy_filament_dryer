@@ -34,7 +34,7 @@
 // #define MQTT_USER "MQTTUSER"   no auth used if empty
 // #define MQTT_PASSWORD "MQTTPASSWORD"
 #ifndef WIFI_SSID
-#define WIFI_SSID "WiFi SSID"
+#define WIFI_SSID "WiFi SSID"0, 0
 #endif
 
 #ifndef WIFI_PASSWORD
@@ -470,7 +470,7 @@ void loop() {
 
 
   if (now_ms - last_push_data > PUSH_DATA_INTERVAL) {
-    mqttController.pushData(reg_mode, 0, 0, 0, 0, 0);
+    mqttController.pushData(reg_mode, reg_target, pwm_heater, pwm_fan, pwm_led, 0);
     last_push_data = now_ms;
   }
 

@@ -1036,7 +1036,7 @@
                   },
                   "group": "",
                   "groupIndex": 0,
-                  "text": "(reg_mode==1)? (reg_target + \"°C\") : (reg_mode==2) ? reg_target + \"%\"):\"\"",
+                  "text": "(reg_mode==1)?(reg_target + \"°C\"):(reg_mode==2)?(reg_target + \"%\"):\"\"",
                   "textType": "expression",
                   "longMode": "WRAP",
                   "recolor": false

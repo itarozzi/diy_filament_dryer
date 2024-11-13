@@ -137,6 +137,7 @@ void MqttController::mqtt_subscribe() {
             done = true;
         }
 
+
         if (done && remote_cmd_callback_) {
             remote_cmd_callback_(cmd_mode, cmd_heater_pwm, cmd_fan_pwm, cmd_led_pwm);
         }
