@@ -93,6 +93,11 @@
 SPIClass touchscreenSPI = SPIClass(VSPI);
 XPT2046_Touchscreen touchscreen(XPT2046_CS, XPT2046_IRQ);
 
+// PWM pins
+#define HEATER_PIN 5
+#define FAN_PIN 18
+#define LED_PIN 19
+
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
 
@@ -115,7 +120,13 @@ BME280<> BMESensor;
 MqttController mqttController(MQTT_BROKER, MQTT_PORT, MQTT_USER, MQTT_PASSWORD, MQTT_BASE_TOPIC);
 
 //************* EEZ-Studio Native global variables  *************
+RegulationModes reg_mode;
+
 int32_t mode;
+int32_t pwm_heater;
+int32_t pwm_fan;
+int32_t pwm_led;
+
 bool running;
 bool wifi_connected;
 bool mqtt_connected;
@@ -151,6 +162,42 @@ float current_humi;
 //   // Cheap Yellow Display built-in RGB LED is controlled with inverted logic
 //   digitalWrite(CYD_LED_BLUE, value ? LOW : HIGH);
 // }
+
+
+
+RegulationModes get_var_reg_mode() {
+    return reg_mode;
+}
+
+void set_var_reg_mode(RegulationModes value) {
+    reg_mode = value;
+}
+
+int32_t get_var_pwm_led() {
+    return pwm_led;
+}
+
+void set_var_pwm_led(int32_t value) {
+    pwm_led = value;
+}
+
+
+int32_t get_var_pwm_fan() {
+    return pwm_fan;
+}
+
+void set_var_pwm_fan(int32_t value) {
+    pwm_fan = value;
+}
+
+
+int32_t get_var_pwm_heater() {
+    return pwm_heater;
+}
+
+void set_var_pwm_heater(int32_t value) {
+    pwm_heater = value;
+}
 
 
 float get_var_current_humi() {
@@ -295,14 +342,10 @@ void setup() {
   Serial.println(SW_NAME_REV);
   Serial.println(LVGL_Arduino);
 
-  // pinMode(CYD_LED_RED, OUTPUT);
-  // pinMode(CYD_LED_GREEN, OUTPUT);
-  // pinMode(CYD_LED_BLUE, OUTPUT);
-
-  // digitalWrite(CYD_LED_BLUE, HIGH);
-  // digitalWrite(CYD_LED_GREEN, HIGH);
-  // digitalWrite(CYD_LED_RED, HIGH);
-
+  pinMode(HEATER_PIN, OUTPUT);
+  pinMode(FAN_PIN, OUTPUT);
+  pinMode(LED_PIN, OUTPUT);
+  
   
   // Initialize BME280 sensor
   // Wire.begin(0,2);                                                      // initialize I2C that connects to sensor
@@ -320,38 +363,17 @@ void setup() {
   ui_init();
 
   // Connect to WiFi and Broker
+  mqttController.setRemoteCommandsCallback([](int cmd_mode, int cmd_heater_pwm, int cmd_fan_pwm, int cmd_led_pwm) { 
+    if (cmd_mode >=0) reg_mode = RegulationModes(cmd_mode);
+    if (reg_mode == RegulationModes::RegulationModes_REG_REMOTE) {
+      if (cmd_heater_pwm >=0) pwm_heater = cmd_heater_pwm;
+      if (cmd_fan_pwm >=0) pwm_fan = cmd_fan_pwm;
+      if (cmd_led_pwm >=0) pwm_led = cmd_led_pwm;
+    }
+  });
+  
   mqttController.connectWifi(WIFI_SSID, WIFI_PASSWORD);
 
-/*
-
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-
-
-  unsigned long startAttemptTime = millis();  // Momento in cui inizia il tentativo di connessione
-  unsigned long timeoutPeriod = 15000;         // Tempo di attesa massimo in millisecondi (5 secondi)
-
-  Serial.println("wait...");
-
-  // Prova a connetterti alla rete WiFi fino al raggiungimento del timeout
-  while (WiFi.status() != WL_CONNECTED && millis() - startAttemptTime < timeoutPeriod) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-
-  // Controlla se la connessione ha avuto successo
-  if (WiFi.status() == WL_CONNECTED) {
-    Serial.println("Connessione Wi-Fi stabilita");
-    Serial.println("Indirizzo IP:");
-    Serial.println(WiFi.localIP());
-    wifi_connected = true;
-  } else {
-    wifi_connected = false;
-    Serial.println("Impossibile connettersi al WiFi entro il tempo specificato");
-    // Qui puoi gestire il caso di mancata connessione, 
-    // ad esempio provare a connetterti di nuovo in un secondo momento
-  }
-*/
 }
 
 #define ASCII_ESC 27
@@ -379,6 +401,39 @@ void read_sensor() {
   Serial.println("%");
   */
   
+}
+
+void regulation_loop() {
+
+  if (reg_mode == RegulationModes::RegulationModes_REG_OFF) {
+    // all pwm values to 0 (except led)
+    pwm_heater = 0;
+    pwm_fan = 0;
+  }
+
+  else if (reg_mode == RegulationModes::RegulationModes_REG_TEMP) {
+    // mantain target temperature
+
+    // TODO: complete this
+
+  }
+  else if (reg_mode == RegulationModes::RegulationModes_REG_HUMI) {
+    // mantain target humidity  
+
+    // TODO: complete this
+  }
+  else if (reg_mode == RegulationModes::RegulationModes_REG_REMOTE) {
+    // apply pwm values received from mqtt
+
+  }
+  else if (reg_mode == RegulationModes::RegulationModes_REG_MANUAL) {
+    // not yet implementd
+  }
+
+  // apply PWM to pins
+  analogWrite(HEATER_PIN, pwm_heater);
+  analogWrite(FAN_PIN, pwm_fan);
+  analogWrite(LED_PIN, pwm_led);
 }
 
 void loop() {
@@ -422,6 +477,9 @@ void loop() {
   lv_task_handler();  // let the GUI do its work
   lv_tick_inc(now_ms - last_ms);     // tell LVGL how much time has passed
   ui_tick(); // uncomment if using eez-flow
+
+  // Regulate heater, fan and led on the current selected mode
+  regulation_loop();
 
   last_ms = now_ms;
   delay(5);           // let this time pass

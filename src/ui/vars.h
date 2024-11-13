@@ -10,7 +10,13 @@ extern "C" {
 
 // enum declarations
 
-
+typedef enum {
+    RegulationModes_REG_OFF = 0,
+    RegulationModes_REG_TEMP = 1,
+    RegulationModes_REG_HUMI = 2,
+    RegulationModes_REG_REMOTE = 3,
+    RegulationModes_REG_MANUAL = 4
+} RegulationModes;
 
 // Flow global variables
 
@@ -32,6 +38,14 @@ extern float get_var_current_temp();
 extern void set_var_current_temp(float value);
 extern float get_var_current_humi();
 extern void set_var_current_humi(float value);
+extern int32_t get_var_pwm_heater();
+extern void set_var_pwm_heater(int32_t value);
+extern int32_t get_var_pwm_fan();
+extern void set_var_pwm_fan(int32_t value);
+extern int32_t get_var_pwm_led();
+extern void set_var_pwm_led(int32_t value);
+extern RegulationModes get_var_reg_mode();
+extern void set_var_reg_mode(RegulationModes value);
 
 
 

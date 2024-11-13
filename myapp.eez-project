@@ -159,10 +159,74 @@
         "defaultValue": "0",
         "persistent": false,
         "native": true
+      },
+      {
+        "objID": "18e3672e-e260-4624-81bb-4b2da7bd6420",
+        "name": "pwm_heater",
+        "type": "integer",
+        "defaultValue": "0",
+        "persistent": false,
+        "native": true
+      },
+      {
+        "objID": "fa8df123-5628-4577-89b9-a06c581b390f",
+        "name": "pwm_fan",
+        "type": "integer",
+        "defaultValue": "0",
+        "persistent": false,
+        "native": true
+      },
+      {
+        "objID": "04642506-8afa-46fd-d956-4f87610485f5",
+        "name": "pwm_led",
+        "type": "integer",
+        "defaultValue": "0",
+        "persistent": false,
+        "native": true
+      },
+      {
+        "objID": "edd5e0d3-6433-4370-dd4c-5d6275d954c8",
+        "name": "reg_mode",
+        "type": "enum:RegulationModes",
+        "defaultValue": "RegulationModes.REG_OFF",
+        "persistent": false,
+        "native": true
       }
     ],
     "structures": [],
-    "enums": []
+    "enums": [
+      {
+        "objID": "00f3a391-ba77-4882-e245-96571a2bdc61",
+        "name": "RegulationModes",
+        "members": [
+          {
+            "objID": "15e91e30-fb98-410c-c596-605ff77fdcb7",
+            "name": "REG_OFF",
+            "value": 0
+          },
+          {
+            "objID": "a030bb56-e93c-481a-fe0d-9d1294f20316",
+            "name": "REG_TEMP",
+            "value": 1
+          },
+          {
+            "objID": "212440f9-21c3-4c84-8944-3454051434d2",
+            "name": "REG_HUMI",
+            "value": 2
+          },
+          {
+            "objID": "f599f319-48e0-4717-bd2d-835dfd3f72cf",
+            "name": "REG_REMOTE",
+            "value": 3
+          },
+          {
+            "objID": "fa062e7f-dba0-4811-c1c4-adbc615885fc",
+            "name": "REG_MANUAL",
+            "value": 4
+          }
+        ]
+      }
+    ]
   },
   "actions": [],
   "userPages": [

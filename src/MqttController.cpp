@@ -15,6 +15,7 @@ MqttController::~MqttController()
 }
 
 
+
 void MqttController::connectWifi(String ssid, String password) {
 
     wifi_ssid = ssid;
@@ -85,10 +86,59 @@ void MqttController::tick() {
 }
 
 void MqttController::mqtt_subscribe() {
-    mqtt->subscribe(mqtt_base_topic + "/commands/#", [](const char * topic, const char * payload) {
-            // payload might be binary, but PicoMQTT guarantees that it's zero-terminated
-            Serial.printf("Received message in topic '%s': %s\n", topic, payload);
+    bool done = false;
+    int cmd_mode = -1;
+    int cmd_heater_pwm = -1;
+    int cmd_fan_pwm = -1;
+    int cmd_led_pwm = -1;
+    mqtt->subscribe(mqtt_base_topic + "/commands/#", [this, &done, &cmd_mode, &cmd_heater_pwm, &cmd_fan_pwm, &cmd_led_pwm](const char * topic, const char * payload) {
+        // payload might be binary, but PicoMQTT guarantees that it's zero-terminated
+        Serial.printf("Received message in topic '%s': %s\n", topic, payload);
+
+        // test if override mode command received
+        String cmd_topic = this->mqtt_base_topic + "/commands/remote_mode_override";
+        if (strncmp(topic, cmd_topic.c_str(), strlen(cmd_topic.c_str())) == 0) {
+            int value = atoi(payload);
+            Serial.print("Override mode: ");
+            Serial.println(value);
+            cmd_mode = value = (value > 3) ? 3 : ((value < 0) ? 0 : value);;
+            done = true;
+        }
+
+        // test if heater_pwm mode command received
+        cmd_topic = this->mqtt_base_topic + "/commands/heater_pwm";
+        if ((!done) && (strncmp(topic, cmd_topic.c_str(), strlen(cmd_topic.c_str())) == 0)) {
+            int value = atoi(payload);
+            Serial.print("PWM heater: ");
+            Serial.println(value);
+            cmd_heater_pwm = value = (value > 255) ? 255 : ((value < 0) ? 0 : value);
+            done = true;
+        }
+
+        // test if fan_pwm mode command received
+        cmd_topic = this->mqtt_base_topic + "/commands/fan_pwm";
+        if ((!done) && (strncmp(topic, cmd_topic.c_str(), strlen(cmd_topic.c_str())) == 0)) {
+            int value = atoi(payload);
+            Serial.print("PWM fan: ");
+            Serial.println(value);
+            cmd_fan_pwm = value = (value > 255) ? 255 : ((value < 0) ? 0 : value);
+            done = true;
+        }
+
+        // test if led_pwm mode command received
+        cmd_topic = this->mqtt_base_topic + "/commands/led_pwm";
+        if ((!done) && (strncmp(topic, cmd_topic.c_str(), strlen(cmd_topic.c_str())) == 0)) {
+            int value = atoi(payload);
+            Serial.print("PWM led: ");
+            Serial.println(value);
+            cmd_led_pwm = value = (value > 255) ? 255 : ((value < 0) ? 0 : value);
+            done = true;
+        }
     });
+    
+    if (done && remote_cmd_callback_) {
+        remote_cmd_callback_(cmd_mode, cmd_heater_pwm, cmd_fan_pwm, cmd_led_pwm);
+    }
 }
 
 

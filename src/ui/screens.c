@@ -66,6 +66,7 @@ void create_screen_main() {
             lv_obj_set_size(obj, 186, 34);
             lv_obj_add_event_cb(obj, event_handler_cb_main_button_mode, LV_EVENT_ALL, flowState);
             add_style_button_mode(obj);
+            lv_obj_set_style_text_color(obj, lv_color_hex(0xffffffff), LV_PART_MAIN | LV_STATE_DEFAULT);
             {
                 lv_obj_t *parent_obj = obj;
                 {
@@ -73,10 +74,12 @@ void create_screen_main() {
                     lv_obj_t *obj = lv_label_create(parent_obj);
                     objects.label_mode = obj;
                     lv_obj_set_pos(obj, 0, 0);
-                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+                    lv_obj_set_size(obj, LV_PCT(100), LV_SIZE_CONTENT);
+                    lv_label_set_long_mode(obj, LV_LABEL_LONG_DOT);
                     lv_label_set_text(obj, "");
                     lv_obj_set_style_align(obj, LV_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
                     lv_obj_set_style_text_font(obj, &lv_font_montserrat_18, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
                 }
             }
         }
@@ -269,7 +272,7 @@ void create_screen_main() {
                     // labelPwmFan
                     lv_obj_t *obj = lv_label_create(parent_obj);
                     objects.label_pwm_fan = obj;
-                    lv_obj_set_pos(obj, 63, 54);
+                    lv_obj_set_pos(obj, 59, 54);
                     lv_obj_set_size(obj, 50, LV_SIZE_CONTENT);
                     lv_label_set_text(obj, "20%");
                     add_style_pwm(obj);
@@ -284,7 +287,7 @@ void create_screen_main() {
                 }
                 {
                     lv_obj_t *obj = lv_img_create(parent_obj);
-                    lv_obj_set_pos(obj, 63, 7);
+                    lv_obj_set_pos(obj, 59, 7);
                     lv_obj_set_size(obj, 50, 50);
                     lv_img_set_src(obj, &img_fan);
                     lv_img_set_zoom(obj, 120);
