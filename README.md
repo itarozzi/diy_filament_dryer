@@ -33,4 +33,11 @@ There are some topic the board use to receive remote commands from the Broker:
 
 ## Screenshots
 
-![screenshot](docs/screenshot1.png)
+#### LVGL GUI
+![LVGL GUI](docs/screenshot1.png)
+
+
+#### Node-RED Flow & Dashboard
+![Node-RED Flow](docs/nodered.png)
+
+![Node-RED Dashboard](docs/nodered_dashboard.png)
