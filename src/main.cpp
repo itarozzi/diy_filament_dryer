@@ -16,6 +16,7 @@
   - TFT_eSPI by Bodmer to use the TFT display - https://github.com/Bodmer/TFT_eSPI
   - lvgl  by LVGL - https://github.com/lvgl/lvgl
   - BME280_Light by Tomasz 'Zen' Napierala
+  - PicoMQTT - https://github.com/mlesniew/PicoMQTT
   
 */
 
@@ -80,6 +81,7 @@
 
 //************* TFT display and includes  *************
 
+#include "User_Setup.h"
 #include <TFT_eSPI.h>
 #include <XPT2046_Touchscreen.h>
 
