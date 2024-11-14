@@ -89,7 +89,7 @@ void create_screen_main() {
             objects.button_settings = obj;
             lv_obj_set_pos(obj, 285, 5);
             lv_obj_set_size(obj, 30, 30);
-            add_style_button_mode(obj);
+            add_style_button_mode3(obj);
             {
                 lv_obj_t *parent_obj = obj;
                 {
@@ -427,7 +427,7 @@ extern void remove_style(lv_obj_t *obj, int32_t styleIndex);
 
 static const char *screen_names[] = { "Main" };
 static const char *object_names[] = { "main", "button_mode", "label_wifi", "label_mqtt", "label_mode", "button_settings", "label_humi", "label_temp", "label_time", "label_target", "label_pwm_heater", "label_pwm_fan", "obj0", "obj1", "obj2" };
-static const char *style_names[] = { "sensorMain", "sensorUm", "pwm", "buttonMode", "target" };
+static const char *style_names[] = { "sensorMain", "sensorUm", "pwm", "buttonMode", "buttonMode1", "buttonMode2", "buttonMode3", "target" };
 
 void create_screens() {
     eez_flow_init_styles(add_style, remove_style);

@@ -332,7 +332,7 @@
                   },
                   "group": "",
                   "groupIndex": 0,
-                  "text": "(reg_mode==0)?LVGL.LV_SYMBOL_POWER + \"  OFF\" : (reg_mode==1)? LVGL.LV_SYMBOL_LOOP + \"  CTRL TEMP\" : (reg_mode==2)? LVGL.LV_SYMBOL_TINT + \"  CTRL HUMI\" : LVGL.LV_SYMBOL_SHUFFLE + \"  CTRL REMOTE\"",
+                  "text": "(reg_mode==0)?LVGL.LV_SYMBOL_POWER + \"  OFF\" : (reg_mode==1)? LVGL.LV_SYMBOL_LOOP + \"  CTRL TEMP\" : (reg_mode==2)? LVGL.LV_SYMBOL_TINT + \"  CTRL HUMI\" : LVGL.LV_SYMBOL_SHUFFLE + \" REMOTE\"",
                   "textType": "expression",
                   "longMode": "DOT",
                   "recolor": false
@@ -449,7 +449,7 @@
               "checkedStateType": "literal",
               "disabledStateType": "literal",
               "states": "",
-              "useStyle": "buttonMode",
+              "useStyle": "buttonMode3",
               "localStyles": {
                 "objID": "04bc310a-fdcd-446a-c07f-22a95a7abc40"
               },
@@ -1462,26 +1462,20 @@
         {
           "objID": "049b8643-408b-49b9-9a1f-a3f2d931ec68",
           "type": "IsTrueActionComponent",
-          "left": 356,
-          "top": 325,
-          "width": 163,
+          "left": 320,
+          "top": 481,
+          "width": 282,
           "height": 70,
-          "customInputs": [
-            {
-              "objID": "b83e7ed1-98f5-4137-e87a-a0cce4aa93fd",
-              "name": "value",
-              "type": "any"
-            }
-          ],
+          "customInputs": [],
           "customOutputs": [],
-          "value": "reg_mode > 3"
+          "value": "reg_mode == RegulationModes.REG_MANUAL"
         },
         {
           "objID": "de7176ae-8a8c-49b7-c4c3-8f04cdea420c",
           "type": "SetVariableActionComponent",
-          "left": 567,
-          "top": 350,
-          "width": 122,
+          "left": 592,
+          "top": 318,
+          "width": 257,
           "height": 57,
           "customInputs": [],
           "customOutputs": [],
@@ -1489,7 +1483,151 @@
             {
               "objID": "f3973156-4917-47c2-fdfd-37945ce5c60e",
               "variable": "reg_mode",
-              "value": "0"
+              "value": "RegulationModes.REG_OFF"
+            }
+          ]
+        },
+        {
+          "objID": "2cdc3e93-c788-46c6-a5ca-9f15a3cf8e94",
+          "type": "SwitchActionComponent",
+          "left": 763,
+          "top": 388,
+          "width": 159,
+          "height": 111,
+          "customInputs": [],
+          "customOutputs": [],
+          "tests": [
+            {
+              "objID": "80de77b9-788e-48f2-c0c9-f5191848f6fb",
+              "condition": "reg_mode == 0",
+              "outputName": "style0"
+            },
+            {
+              "objID": "71329daa-7213-4a11-b11a-cbe2408cc0ad",
+              "condition": "reg_mode == 1",
+              "outputName": "style1"
+            },
+            {
+              "objID": "f3c5fcdc-425e-4063-e049-e0d734b7c096",
+              "condition": "reg_mode == 2",
+              "outputName": "style2"
+            },
+            {
+              "objID": "4ce4f079-2501-4277-8443-8a802bed6d9e",
+              "condition": "reg_mode == 3",
+              "outputName": "style3"
+            }
+          ]
+        },
+        {
+          "objID": "28d4048e-0206-4d77-92fb-c01356619224",
+          "type": "LVGLActionComponent",
+          "left": 1030,
+          "top": 283,
+          "width": 280,
+          "height": 73,
+          "customInputs": [],
+          "customOutputs": [],
+          "actions": [
+            {
+              "objID": "a1a7012e-c233-4153-c4b5-03732524e7f1",
+              "action": "objRemoveStyle",
+              "object": "button_mode",
+              "objectType": "literal",
+              "style": "buttonMode3",
+              "styleType": "literal"
+            },
+            {
+              "objID": "fc81a51a-6862-47b0-ba0f-eb224e3ca14a",
+              "action": "objAddStyle",
+              "object": "button_mode",
+              "objectType": "literal",
+              "style": "buttonMode",
+              "styleType": "literal"
+            }
+          ]
+        },
+        {
+          "objID": "a8ef7062-874b-4c0d-ae5d-1b2bd11d248a",
+          "type": "LVGLActionComponent",
+          "left": 1031,
+          "top": 538,
+          "width": 280,
+          "height": 73,
+          "customInputs": [],
+          "customOutputs": [],
+          "actions": [
+            {
+              "objID": "75d8f51b-fdb8-4287-dbc8-46c9554195d6",
+              "action": "objRemoveStyle",
+              "object": "button_mode",
+              "objectType": "literal",
+              "style": "buttonMode1",
+              "styleType": "literal"
+            },
+            {
+              "objID": "dad84d2c-7175-429b-e7f9-35590d3ff9bb",
+              "action": "objAddStyle",
+              "object": "button_mode",
+              "objectType": "literal",
+              "style": "buttonMode3",
+              "styleType": "literal"
+            }
+          ]
+        },
+        {
+          "objID": "61b41118-e819-4310-9cfe-ddab953de733",
+          "type": "LVGLActionComponent",
+          "left": 1031,
+          "top": 444,
+          "width": 280,
+          "height": 73,
+          "customInputs": [],
+          "customOutputs": [],
+          "actions": [
+            {
+              "objID": "42615722-8c2d-4279-c642-9209e9af09fa",
+              "action": "objRemoveStyle",
+              "object": "button_mode",
+              "objectType": "literal",
+              "style": "buttonMode1",
+              "styleType": "literal"
+            },
+            {
+              "objID": "db1934a3-7ce1-4d76-da8c-04e2adcec7bc",
+              "action": "objAddStyle",
+              "object": "button_mode",
+              "objectType": "literal",
+              "style": "buttonMode2",
+              "styleType": "literal"
+            }
+          ]
+        },
+        {
+          "objID": "a18a9240-ac19-45e8-e19a-5f62bb70be28",
+          "type": "LVGLActionComponent",
+          "left": 1031,
+          "top": 360,
+          "width": 274,
+          "height": 73,
+          "customInputs": [],
+          "customOutputs": [],
+          "actions": [
+            {
+              "objID": "f3998df6-f8c2-49bd-f044-5d5e452278ae",
+              "action": "objRemoveStyle",
+              "object": "button_mode",
+              "objectType": "literal",
+              "style": "buttonMode",
+              "styleType": "literal"
+            },
+            {
+              "objID": "6eb94381-f16d-41ab-889b-052a8f0d5882",
+              "action": "objAddStyle",
+              "object": "button_mode",
+              "objectType": "literal",
+              "style": "buttonMode1",
+              "styleType": "literal"
             }
           ]
         }
@@ -1510,14 +1648,65 @@
           "input": "@seqin"
         },
         {
-          "objID": "04bd9488-e1c8-44ff-b457-6184090f237c",
+          "objID": "0ee66c92-5d77-4b42-e6a6-ebe9b8176fa0",
+          "source": "de7176ae-8a8c-49b7-c4c3-8f04cdea420c",
+          "output": "@seqout",
+          "target": "2cdc3e93-c788-46c6-a5ca-9f15a3cf8e94",
+          "input": "@seqin"
+        },
+        {
+          "objID": "4f2f0c1f-216b-439b-c318-f76fde70ed82",
+          "source": "2cdc3e93-c788-46c6-a5ca-9f15a3cf8e94",
+          "output": "style0",
+          "target": "28d4048e-0206-4d77-92fb-c01356619224",
+          "input": "@seqin"
+        },
+        {
+          "objID": "c939706f-ae39-4e04-bc9a-98b759ad14e8",
+          "source": "2cdc3e93-c788-46c6-a5ca-9f15a3cf8e94",
+          "output": "style3",
+          "target": "a8ef7062-874b-4c0d-ae5d-1b2bd11d248a",
+          "input": "@seqin"
+        },
+        {
+          "objID": "c234b1fa-2b95-4034-90c3-f030cffa6a33",
+          "source": "2cdc3e93-c788-46c6-a5ca-9f15a3cf8e94",
+          "output": "style2",
+          "target": "61b41118-e819-4310-9cfe-ddab953de733",
+          "input": "@seqin"
+        },
+        {
+          "objID": "7ec289f6-de2d-4775-dac6-bbbba0dfcecf",
+          "source": "2cdc3e93-c788-46c6-a5ca-9f15a3cf8e94",
+          "output": "style1",
+          "target": "a18a9240-ac19-45e8-e19a-5f62bb70be28",
+          "input": "@seqin"
+        },
+        {
+          "objID": "6166ea6d-edd7-4017-b0bf-d8e836560041",
           "source": "bc9ad070-de59-44f5-a068-1409c2e555ae",
           "output": "@seqout",
           "target": "049b8643-408b-49b9-9a1f-a3f2d931ec68",
-          "input": "value"
+          "input": "@seqin"
+        },
+        {
+          "objID": "a67b7dff-9b9a-447b-84f4-11f20110f3d8",
+          "source": "049b8643-408b-49b9-9a1f-a3f2d931ec68",
+          "output": "False",
+          "target": "2cdc3e93-c788-46c6-a5ca-9f15a3cf8e94",
+          "input": "@seqin"
         }
       ],
-      "localVariables": [],
+      "localVariables": [
+        {
+          "objID": "3ad1ad23-44a6-4c4e-e009-ae2e1c871e45",
+          "name": "button_mode_style",
+          "type": "string",
+          "defaultValue": "\"buttonMode\"",
+          "persistent": false,
+          "native": false
+        }
+      ],
       "userProperties": [],
       "name": "Main",
       "left": 0,
@@ -1585,7 +1774,56 @@
         "objID": "57a8edc7-9067-4c57-9e84-c5599192fccb",
         "name": "buttonMode",
         "forWidgetType": "LVGLButtonWidget",
-        "childStyles": [],
+        "childStyles": [
+          {
+            "objID": "d574f990-1d30-42a5-98b2-c9e75ceac8cd",
+            "name": "buttonMode1",
+            "forWidgetType": "LVGLButtonWidget",
+            "childStyles": [],
+            "definition": {
+              "objID": "8c4e7061-2cb5-47d7-b52d-af417471f64b",
+              "definition": {
+                "MAIN": {
+                  "DEFAULT": {
+                    "bg_color": "#024d20"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "objID": "b4745997-dff8-4d6c-be61-24c207687b5c",
+            "name": "buttonMode2",
+            "forWidgetType": "LVGLButtonWidget",
+            "childStyles": [],
+            "definition": {
+              "objID": "8acff6b5-a1bf-4108-fa76-d10810a3db16",
+              "definition": {
+                "MAIN": {
+                  "DEFAULT": {
+                    "bg_color": "#3636da"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "objID": "cb48f645-095c-4534-a174-d66dc99343a4",
+            "name": "buttonMode3",
+            "forWidgetType": "LVGLButtonWidget",
+            "childStyles": [],
+            "definition": {
+              "objID": "5ab48369-3359-438f-b92e-ea8ee2901bad",
+              "definition": {
+                "MAIN": {
+                  "DEFAULT": {
+                    "bg_color": "#dc642a"
+                  }
+                }
+              }
+            }
+          }
+        ],
         "definition": {
           "objID": "58aa6e07-0fe3-4a4c-ee27-5ce393066014",
           "definition": {

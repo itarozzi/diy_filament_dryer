@@ -27,6 +27,21 @@ lv_style_t *get_style_button_mode_MAIN_DEFAULT();
 void add_style_button_mode(lv_obj_t *obj);
 void remove_style_button_mode(lv_obj_t *obj);
 
+// Style: buttonMode1
+lv_style_t *get_style_button_mode1_MAIN_DEFAULT();
+void add_style_button_mode1(lv_obj_t *obj);
+void remove_style_button_mode1(lv_obj_t *obj);
+
+// Style: buttonMode2
+lv_style_t *get_style_button_mode2_MAIN_DEFAULT();
+void add_style_button_mode2(lv_obj_t *obj);
+void remove_style_button_mode2(lv_obj_t *obj);
+
+// Style: buttonMode3
+lv_style_t *get_style_button_mode3_MAIN_DEFAULT();
+void add_style_button_mode3(lv_obj_t *obj);
+void remove_style_button_mode3(lv_obj_t *obj);
+
 // Style: target
 lv_style_t *get_style_target_MAIN_DEFAULT();
 void add_style_target(lv_obj_t *obj);
