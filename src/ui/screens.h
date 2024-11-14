@@ -12,17 +12,24 @@ typedef struct _objects_t {
     lv_obj_t *button_mode;
     lv_obj_t *label_wifi;
     lv_obj_t *label_mqtt;
+    lv_obj_t *button_start;
+    lv_obj_t *button_start_1;
     lv_obj_t *label_mode;
     lv_obj_t *button_settings;
     lv_obj_t *label_humi;
     lv_obj_t *label_temp;
     lv_obj_t *label_time;
+    lv_obj_t *panel_target;
     lv_obj_t *label_target;
+    lv_obj_t *cont_heater_fan;
     lv_obj_t *label_pwm_heater;
     lv_obj_t *label_pwm_fan;
+    lv_obj_t *cont_start;
     lv_obj_t *obj0;
     lv_obj_t *obj1;
     lv_obj_t *obj2;
+    lv_obj_t *obj3;
+    lv_obj_t *obj4;
 } objects_t;
 
 extern objects_t objects;
