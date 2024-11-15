@@ -7,7 +7,23 @@ MqttController::MqttController(String broker_address, int broker_port, String us
     mqtt_user = username;    
     mqtt_password = password;    
     mqtt_base_topic = base_topic;
-    
+        
+    //assign mqtt callbacks and subscribe once
+    mqtt.connected_callback = [this] {
+                this->mqtt_connecting = false;
+                this->mqtt_connected = true;
+                Serial.println("MQTT connected");
+            };
+
+    mqtt.disconnected_callback = [this] {
+            this->mqtt_connecting = false;
+            this->mqtt_connected = false;
+            Serial.println("MQTT disconnected");
+            if (mqtt_on_disconnect_callback_)
+                mqtt_on_disconnect_callback_();
+        };
+    mqtt_subscribe();
+
     connection = false;
 }
 
@@ -64,20 +80,7 @@ void MqttController::tick() {
         }
         else if (!mqtt_connecting) {
             //TODO: manage timeout
-            mqtt.connected_callback = [this] {
-                this->mqtt_connecting = false;
-                this->mqtt_connected = true;
-                Serial.println("MQTT connected");
-            };
-
-            mqtt.disconnected_callback = [this] {
-                this->mqtt_connecting = false;
-                this->mqtt_connected = false;
-                Serial.println("MQTT disconnected");
-                if (mqtt_on_disconnect_callback_)
-                    mqtt_on_disconnect_callback_();
-            };
-            mqtt_subscribe();
+           
 
             mqtt.host = mqtt_broker;
             mqtt.port = mqtt_port;
@@ -157,23 +160,47 @@ void MqttController::mqtt_subscribe() {
 }
 
 
-void MqttController::getConnectionStatus(bool *wifi_connected,  bool *mqtt_connected) {
-    *wifi_connected = this->wifi_connected;
-    *mqtt_connected = this->mqtt_connected;
+void MqttController::getConnectionStatus(bool *wifi_connected_,  bool *mqtt_connected_) {
+    *wifi_connected_ = this->wifi_connected;
+    *mqtt_connected_ = this->mqtt_connected;
 }
 
 void MqttController::pushSensors(float temp, float humi){
-    mqtt.publish(mqtt_base_topic + "/sensors", "{\"temp\": " + String(temp) + ", \"humi\": " + String(humi) + "}"); 
+    if (mqtt_connected) {
+    if (!mqtt.publish(mqtt_base_topic + "/sensors", "{\"temp\": " + String(temp) + ", \"humi\": " + String(humi) + "}", 1U)) {
+        increment_mqtt_errors();
+    }
+    }
 }
 
 void MqttController::pushData(int mode, float target, int heater_pwm, int fan_pwm, int led_pwm, long remaining_time) {
-
-    mqtt.publish(mqtt_base_topic + "/rtdata", 
+    if (mqtt_connected) {
+    if (!mqtt.publish(mqtt_base_topic + "/rtdata", 
         "{\"mode\": " + String(mode) + 
         ", \"target\": " + String(target) + 
         ", \"heater_pwm\": " + String(heater_pwm) + 
         ", \"fan_pwm\": " + String(fan_pwm) + 
         ", \"led_pwm\": " + String(led_pwm) + 
         ", \"remaining_time\": " + String(remaining_time) + 
-        "}"); 
+        "}", 1U)) {
+            increment_mqtt_errors();
+        }
+    }
+}
+
+void MqttController::increment_mqtt_errors() {
+    mqtt_errors++;
+    Serial.println("mqtt errors: " + String(mqtt_errors));
+    if (mqtt_errors > MQTT_MAX_ERRORS) {
+        mqtt.disconnect();
+        mqtt_errors = 0;
+        
+        //TODO: may be the wifi reset is required only if the mqtt errors persist
+
+        // reset all connections and retry to reconnect
+        wifi_connected = false;
+        wifi_connecting = false;
+        mqtt_connected = false;
+        mqtt_connecting = false;
+    }
 }
