@@ -2,8 +2,10 @@
 
 MqttController::MqttController(String broker_address, int broker_port, String username, String password, String base_topic)
 {
-    //TODO: auth management
-    mqtt = new PicoMQTT::Client(broker_address.c_str(), broker_port); // create mqtt_client
+    mqtt_broker = broker_address;
+    mqtt_port = broker_port;
+    mqtt_user = username;    
+    mqtt_password = password;    
     mqtt_base_topic = base_topic;
     
     connection = false;
@@ -11,7 +13,7 @@ MqttController::MqttController(String broker_address, int broker_port, String us
 
 MqttController::~MqttController()
 {
-    delete mqtt;
+    
 }
 
 
@@ -62,24 +64,32 @@ void MqttController::tick() {
         }
         else if (!mqtt_connecting) {
             //TODO: manage timeout
-            mqtt->connected_callback = [this] {
+            mqtt.connected_callback = [this] {
                 this->mqtt_connecting = false;
                 this->mqtt_connected = true;
                 Serial.println("MQTT connected");
             };
 
-            mqtt->disconnected_callback = [this] {
+            mqtt.disconnected_callback = [this] {
                 this->mqtt_connecting = false;
                 this->mqtt_connected = false;
                 Serial.println("MQTT disconnected");
+                if (mqtt_on_disconnect_callback_)
+                    mqtt_on_disconnect_callback_();
             };
             mqtt_subscribe();
-            mqtt->begin();
+
+            mqtt.host = mqtt_broker;
+            mqtt.port = mqtt_port;
+
+            // TODO: auth management
+
+            mqtt.begin();
             mqtt_connecting = true;                    
 
         }
         else {
-            mqtt->loop();
+            mqtt.loop();
         }
 
     }
@@ -87,7 +97,7 @@ void MqttController::tick() {
 
 void MqttController::mqtt_subscribe() {
 
-    mqtt->subscribe(mqtt_base_topic + "/commands/#", [this](const char * topic, const char * payload) {
+    mqtt.subscribe(mqtt_base_topic + "/commands/#", [this](const char * topic, const char * payload) {
         bool done = false;
         int cmd_mode = -1;
         int cmd_heater_pwm = -1;
@@ -153,12 +163,12 @@ void MqttController::getConnectionStatus(bool *wifi_connected,  bool *mqtt_conne
 }
 
 void MqttController::pushSensors(float temp, float humi){
-    mqtt->publish(mqtt_base_topic + "/sensors", "{\"temp\": " + String(temp) + ", \"humi\": " + String(humi) + "}"); 
+    mqtt.publish(mqtt_base_topic + "/sensors", "{\"temp\": " + String(temp) + ", \"humi\": " + String(humi) + "}"); 
 }
 
 void MqttController::pushData(int mode, float target, int heater_pwm, int fan_pwm, int led_pwm, long remaining_time) {
 
-    mqtt->publish(mqtt_base_topic + "/rtdata", 
+    mqtt.publish(mqtt_base_topic + "/rtdata", 
         "{\"mode\": " + String(mode) + 
         ", \"target\": " + String(target) + 
         ", \"heater_pwm\": " + String(heater_pwm) + 

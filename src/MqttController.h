@@ -15,7 +15,11 @@ private:
     bool wifi_connecting = false;
     bool wifi_connected = false;
 
-    PicoMQTT::Client *mqtt = nullptr;
+    PicoMQTT::Client mqtt;
+    String mqtt_broker;
+    int  mqtt_port;
+    String mqtt_user;
+    String mqtt_password;
     bool mqtt_connecting = false;
     bool mqtt_connected = false;
     String mqtt_base_topic = "";
@@ -26,8 +30,7 @@ private:
     void mqtt_subscribe();
     
     void onConnectCallback(bool reconnect, const char *topic, uint8_t *payload, unsigned int length) {       }
-    std::function<void()> mqtt_on_disconnect ();
-
+    std::function<void()> mqtt_on_disconnect_callback_ ;
     std::function<void(int,int,int,int)> remote_cmd_callback_;
 
 
