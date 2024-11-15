@@ -174,16 +174,23 @@ void MqttController::pushSensors(float temp, float humi){
 }
 
 void MqttController::pushData(int mode, float target, int heater_pwm, int fan_pwm, int led_pwm, long remaining_time) {
+    static auto mode_prev = -1;
     if (mqtt_connected) {
-    if (!mqtt.publish(mqtt_base_topic + "/rtdata", 
-        "{\"mode\": " + String(mode) + 
-        ", \"target\": " + String(target) + 
-        ", \"heater_pwm\": " + String(heater_pwm) + 
-        ", \"fan_pwm\": " + String(fan_pwm) + 
-        ", \"led_pwm\": " + String(led_pwm) + 
-        ", \"remaining_time\": " + String(remaining_time) + 
-        "}", 1U)) {
-            increment_mqtt_errors();
+        if (!mqtt.publish(mqtt_base_topic + "/rtdata", 
+            "{\"mode\": " + String(mode) + 
+            ", \"target\": " + String(target) + 
+            ", \"heater_pwm\": " + String(heater_pwm) + 
+            ", \"fan_pwm\": " + String(fan_pwm) + 
+            ", \"led_pwm\": " + String(led_pwm) + 
+            ", \"remaining_time\": " + String(remaining_time) + 
+            "}", 1U)) {
+                increment_mqtt_errors();
+            }
+        
+
+        if (mode != mode_prev) {
+            mqtt.publish(mqtt_base_topic + "/reg_mode", String(mode), 1U);
+            mode_prev = mode;
         }
     }
 }

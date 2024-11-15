@@ -1963,6 +1963,17 @@
               "value": "false"
             }
           ]
+        },
+        {
+          "objID": "d9605a22-f30d-4f1c-bcbb-89e43a2b0e78",
+          "type": "WatchVariableActionComponent",
+          "left": 757,
+          "top": 340,
+          "width": 123,
+          "height": 54,
+          "customInputs": [],
+          "customOutputs": [],
+          "variable": "reg_mode"
         }
       ],
       "connectionLines": [
@@ -2048,6 +2059,13 @@
           "source": "688d89d7-1ae8-4c5c-86b4-c766aed5920b",
           "output": "LONG_PRESSED",
           "target": "49d741c1-decc-4afe-c91c-f546d4e84387",
+          "input": "@seqin"
+        },
+        {
+          "objID": "6ba12a7d-7bad-4100-abb1-9387ca353850",
+          "source": "d9605a22-f30d-4f1c-bcbb-89e43a2b0e78",
+          "output": "variable",
+          "target": "2cdc3e93-c788-46c6-a5ca-9f15a3cf8e94",
           "input": "@seqin"
         }
       ],

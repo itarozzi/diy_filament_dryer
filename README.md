@@ -19,6 +19,7 @@ The {base_topic} is defined in the code:
 ```
 
 There are some topic used to send sensors values and other realtime data from board to the Broker:
+- {base_topic}/reg_mode -> current regulation mode (0..3)
 - {base_topic}/sensors -> json with sensors values: {temp: 23, humi: 60}
 - {base_topic}/rtdata  -> json with realtime data values: {"mode":0,"target":0,"heater_pwm":0,"fan_pwm":0,"led_pwm":0,"remaining_time":0}
 
