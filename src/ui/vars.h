@@ -44,8 +44,10 @@ extern int32_t get_var_pwm_led();
 extern void set_var_pwm_led(int32_t value);
 extern RegulationModes get_var_reg_mode();
 extern void set_var_reg_mode(RegulationModes value);
-extern int32_t get_var_reg_target();
-extern void set_var_reg_target(int32_t value);
+extern int32_t get_var_reg_target_temp();
+extern void set_var_reg_target_temp(int32_t value);
+extern int32_t get_var_reg_target_humi();
+extern void set_var_reg_target_humi(int32_t value);
 
 
 

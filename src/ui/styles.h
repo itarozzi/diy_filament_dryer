@@ -47,6 +47,11 @@ lv_style_t *get_style_target_MAIN_DEFAULT();
 void add_style_target(lv_obj_t *obj);
 void remove_style_target(lv_obj_t *obj);
 
+// Style: ButtonOkCancel
+lv_style_t *get_style_button_ok_cancel_MAIN_DEFAULT();
+void add_style_button_ok_cancel(lv_obj_t *obj);
+void remove_style_button_ok_cancel(lv_obj_t *obj);
+
 
 
 #ifdef __cplusplus

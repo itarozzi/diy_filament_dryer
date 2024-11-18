@@ -95,7 +95,7 @@
 #define XPT2046_CLK 25   // T_CLK
 
 
-# PID defines
+// PID defines
 #define PWM_FAN_CONSERVATIVE  150
 #define PWM_FAN_AGGRESSIVE  255
 
@@ -139,7 +139,7 @@ bool mqtt_connected;
 float current_temp;
 float current_humi;
 
-int32_t reg_target;
+int32_t reg_target_temp, reg_target_humi;
 
 
 // ********  PID parameters ********
@@ -185,14 +185,21 @@ PID myPID(&PIDInput, &PIDOutput, &PIDSetpoint, consKp, consKi, consKd, DIRECT);
 //   digitalWrite(CYD_LED_BLUE, value ? LOW : HIGH);
 // }
 
-int32_t get_var_reg_target() {
-    return reg_target;
+int32_t get_var_reg_target_temp() {
+    return reg_target_temp;
 }
 
-void set_var_reg_target(int32_t value) {
-    reg_target = value;
+void set_var_reg_target_temp(int32_t value) {
+    reg_target_temp = value;
 }
 
+int32_t get_var_reg_target_humi() {
+    return reg_target_humi;
+}
+
+void set_var_reg_target_humi(int32_t value) {
+    reg_target_humi = value;
+}
 
 RegulationModes get_var_reg_mode() {
     return reg_mode;
@@ -441,10 +448,10 @@ void regulation_loop() {
       reg_mode_prev = reg_mode;
     }
 
-    PIDSetpoint = reg_target;
+    PIDSetpoint = reg_target_temp;
     PIDInput = current_temp;
 
-    double gap = abs(Setpoint-Input);
+    double gap = abs(PIDSetpoint-PIDInput);
     if (gap < 10) {
       //we're close to setpoint, use conservative tuning parameters
       myPID.SetTunings(consKp, consKi, consKd);
@@ -457,7 +464,7 @@ void regulation_loop() {
     }
     myPID.Compute();
 
-    pwm_heater = myPID.Output;
+    pwm_heater = PIDOutput;
 
 
   }
@@ -514,7 +521,9 @@ void loop() {
 
 
   if (now_ms - last_push_data > PUSH_DATA_INTERVAL) {
-    mqttController.pushData(reg_mode, reg_target, pwm_heater, pwm_fan, pwm_led, 0);
+    mqttController.pushData(reg_mode, 
+    reg_mode == RegulationModes::RegulationModes_REG_TEMP ? reg_target_temp : reg_mode == RegulationModes::RegulationModes_REG_HUMI ? reg_target_humi : 0,
+    pwm_heater, pwm_fan, pwm_led, 0);
     last_push_data = now_ms;
   }
 
