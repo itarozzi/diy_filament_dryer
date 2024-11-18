@@ -17,11 +17,13 @@
   - lvgl  by LVGL - https://github.com/lvgl/lvgl
   - BME280_Light by Tomasz 'Zen' Napierala
   - PicoMQTT - https://github.com/mlesniew/PicoMQTT
+  - PID_V1 - https://github.com/br3ttb/Arduino-PID-Library/
   
 */
 
 #include <Arduino.h>
-// #include <WiFi.h>
+#include <PID_v1.h>
+
 #include "MqttController.h"
 
 #if __has_include("credentials.h")
@@ -92,6 +94,11 @@
 #define XPT2046_CS 33    // T_CS
 #define XPT2046_CLK 25   // T_CLK
 
+
+# PID defines
+#define PWM_FAN_CONSERVATIVE  150
+#define PWM_FAN_AGGRESSIVE  255
+
 SPIClass touchscreenSPI = SPIClass(VSPI);
 XPT2046_Touchscreen touchscreen(XPT2046_CS, XPT2046_IRQ);
 
@@ -111,17 +118,15 @@ int x, y, z;
 #define DRAW_BUF_SIZE (SCREEN_WIDTH * SCREEN_HEIGHT / 10 * (LV_COLOR_DEPTH / 8))
 uint32_t draw_buf[DRAW_BUF_SIZE / 4];
 
-
-// TFT display
+// ********  TFT display ********
 TFT_eSPI tft = TFT_eSPI();
-// ******************
 
-// Temperature and humidity sensor
+// ******** Temperature and humidity sensor ********
 BME280<> BMESensor;    
 
 MqttController mqttController(MQTT_BROKER, MQTT_PORT, MQTT_USER, MQTT_PASSWORD, MQTT_BASE_TOPIC);
 
-//************* EEZ-Studio Native global variables  *************
+// ************* EEZ-Studio Native global variables  *************
 RegulationModes reg_mode;
 
 int32_t pwm_heater;
@@ -137,7 +142,21 @@ float current_humi;
 int32_t reg_target;
 
 
-// ** Define your action here **
+// ********  PID parameters ********
+double PIDSetpoint, PIDInput, PIDOutput;
+
+// Define the aggressive and conservative Tuning Parameters
+double aggKp=4, aggKi=0.2, aggKd=1;
+double consKp=1, consKi=0.05, consKd=0.25;
+//Specify the links and initial tuning parameters
+PID myPID(&PIDInput, &PIDOutput, &PIDSetpoint, consKp, consKi, consKd, DIRECT);
+
+
+
+
+
+
+// ************* EEZ-Studio actions  *************
 
 // If you define custom action to change pages, then you can use these
 
@@ -406,6 +425,7 @@ void read_sensor() {
 }
 
 void regulation_loop() {
+  static auto reg_mode_prev = reg_mode;
 
   if (reg_mode == RegulationModes::RegulationModes_REG_OFF) {
     // all pwm values to 0 (except led)
@@ -416,7 +436,29 @@ void regulation_loop() {
   else if (reg_mode == RegulationModes::RegulationModes_REG_TEMP) {
     // mantain target temperature
 
-    // TODO: complete this
+    if (reg_mode != reg_mode_prev) {
+      myPID.SetMode(AUTOMATIC);
+      reg_mode_prev = reg_mode;
+    }
+
+    PIDSetpoint = reg_target;
+    PIDInput = current_temp;
+
+    double gap = abs(Setpoint-Input);
+    if (gap < 10) {
+      //we're close to setpoint, use conservative tuning parameters
+      myPID.SetTunings(consKp, consKi, consKd);
+      pwm_fan = PWM_FAN_CONSERVATIVE;
+    }
+    else {
+      //we're far from setpoint, use aggressive tuning parameters
+      myPID.SetTunings(aggKp, aggKi, aggKd);
+      pwm_fan = PWM_FAN_AGGRESSIVE;
+    }
+    myPID.Compute();
+
+    pwm_heater = myPID.Output;
+
 
   }
   else if (reg_mode == RegulationModes::RegulationModes_REG_HUMI) {
@@ -425,7 +467,7 @@ void regulation_loop() {
     // TODO: complete this
   }
   else if (reg_mode == RegulationModes::RegulationModes_REG_REMOTE) {
-    // apply pwm values received from mqtt
+    // apply pwm values already received from mqtt
 
   }
   else if (reg_mode == RegulationModes::RegulationModes_REG_MANUAL) {

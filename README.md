@@ -32,6 +32,23 @@ There are some topic the board use to receive remote commands from the Broker:
 - {base_topic}/commands/led_pwm                  (int) -> pwm out value (0/255) for led
 
 
+
+##  Libraries dependencies
+
+The project uses the following libraries from PlatformIO registry :
+
+- XPT2046_Touchscreen by Paul Stoffregen to use the Touchscreen - https://github.com/PaulStoffregen/XPT2046_Touchscreen 
+- TFT_eSPI by Bodmer to use the TFT display - https://github.com/Bodmer/TFT_eSPI
+- lvgl v9 by LVGL - https://github.com/lvgl/lvgl
+- BME280_Light by Tomasz 'Zen' Napierala
+- PicoMQTT - https://github.com/mlesniew/PicoMQTT
+- PID_V1 - https://github.com/br3ttb/Arduino-PID-Library/
+
+See the file `platformio.ini` for the lib_deps options listing used libs.
+
+
+
+
 ## Screenshots
 
 #### LVGL GUI
