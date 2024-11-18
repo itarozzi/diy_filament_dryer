@@ -21,7 +21,8 @@ typedef enum {
 // Flow global variables
 
 enum FlowGlobalVariables {
-    FLOW_GLOBAL_VARIABLE_COUNTER = 0
+    FLOW_GLOBAL_VARIABLE_COUNTER = 0,
+    FLOW_GLOBAL_VARIABLE_TIMER = 1
 };
 
 // Native global variables
@@ -48,6 +49,8 @@ extern int32_t get_var_reg_target_temp();
 extern void set_var_reg_target_temp(int32_t value);
 extern int32_t get_var_reg_target_humi();
 extern void set_var_reg_target_humi(int32_t value);
+extern double get_var_remaining_time_sec();
+extern void set_var_remaining_time_sec(double value);
 
 
 

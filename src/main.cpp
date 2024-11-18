@@ -138,6 +138,7 @@ bool wifi_connected;
 bool mqtt_connected;
 float current_temp;
 float current_humi;
+double remaining_time_sec;
 
 int32_t reg_target_temp, reg_target_humi;
 
@@ -184,6 +185,14 @@ PID myPID(&PIDInput, &PIDOutput, &PIDSetpoint, consKp, consKi, consKd, DIRECT);
 //   // Cheap Yellow Display built-in RGB LED is controlled with inverted logic
 //   digitalWrite(CYD_LED_BLUE, value ? LOW : HIGH);
 // }
+
+double get_var_remaining_time_sec() {
+    return remaining_time_sec;
+}
+
+void set_var_remaining_time_sec(double value) {
+    remaining_time_sec = value;
+}
 
 int32_t get_var_reg_target_temp() {
     return reg_target_temp;
@@ -327,8 +336,12 @@ void lv_init_esp32(void) {
   
   touchscreen.begin(touchscreenSPI);
   
-  // Set the Touchscreen rotation 
-  touchscreen.setRotation(1);  // 2:vertical / 1|3:horizontal
+  // Set the Touchscreen rotation
+  #ifdef TOUCH_INVERTED 
+    touchscreen.setRotation(3);  // 2:vertical / 1|3:horizontal
+  #else
+    touchscreen.setRotation(1);  // 2:vertical / 1|3:horizontal
+  #endif
 
   // Create a display object
   lv_display_t * disp;
@@ -503,8 +516,13 @@ void loop() {
     #ifndef IGNORE_SENSORS
     read_sensor();
     #else
-    current_temp = rand() % 100;
-    current_humi = rand() % 100;
+    static float simulated_temp = 20;
+
+    simulated_temp += random(-1, 3);
+
+
+    current_temp = simulated_temp;
+    current_humi = random(30, 40);
     #endif
 
     mqttController.pushSensors(current_temp, current_humi);

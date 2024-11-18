@@ -49,6 +49,16 @@ static void event_handler_cb_main_label_mqtt(lv_event_t *e) {
     }
 }
 
+static void event_handler_cb_main_label_time(lv_event_t *e) {
+    lv_event_code_t event = lv_event_get_code(e);
+    void *flowState = lv_event_get_user_data(e);
+    
+    if (event == LV_EVENT_LONG_PRESSED) {
+        e->user_data = (void *)0;
+        flowPropagateValueLVGLEvent(flowState, 15, 0, e);
+    }
+}
+
 static void event_handler_cb_main_panel_target(lv_event_t *e) {
     lv_event_code_t event = lv_event_get_code(e);
     void *flowState = lv_event_get_user_data(e);
@@ -63,7 +73,7 @@ static void event_handler_cb_main_button_start(lv_event_t *e) {
     lv_event_code_t event = lv_event_get_code(e);
     void *flowState = lv_event_get_user_data(e);
     
-    if (event == LV_EVENT_CLICKED) {
+    if (event == LV_EVENT_LONG_PRESSED) {
         e->user_data = (void *)0;
         flowPropagateValueLVGLEvent(flowState, 27, 0, e);
     }
@@ -114,6 +124,41 @@ static void event_handler_cb_set_target_obj2(lv_event_t *e) {
     }
 }
 
+static void event_handler_cb_set_timer_obj3(lv_event_t *e) {
+    lv_event_code_t event = lv_event_get_code(e);
+    void *flowState = lv_event_get_user_data(e);
+    
+    if (event == LV_EVENT_PRESSED) {
+        e->user_data = (void *)0;
+        flowPropagateValueLVGLEvent(flowState, 2, 0, e);
+    }
+}
+
+static void event_handler_cb_set_timer_obj4(lv_event_t *e) {
+    lv_event_code_t event = lv_event_get_code(e);
+    void *flowState = lv_event_get_user_data(e);
+    
+    if (event == LV_EVENT_PRESSED) {
+        e->user_data = (void *)0;
+        flowPropagateValueLVGLEvent(flowState, 4, 0, e);
+    }
+}
+
+static void event_handler_cb_set_timer_obj5(lv_event_t *e) {
+    lv_event_code_t event = lv_event_get_code(e);
+    void *flowState = lv_event_get_user_data(e);
+    
+    if (event == LV_EVENT_VALUE_CHANGED) {
+        lv_obj_t *ta = lv_event_get_target(e);
+        if (tick_value_change_obj != ta) {
+            int32_t value = lv_slider_get_value(ta);
+            if (tick_value_change_obj != ta) {
+                assignIntegerProperty(flowState, 6, 3, value, "Failed to assign Value in Slider widget");
+            }
+        }
+    }
+}
+
 void create_screen_main() {
     void *flowState = getFlowState(0, 0);
     lv_obj_t *obj = lv_obj_create(0);
@@ -159,7 +204,7 @@ void create_screen_main() {
                 lv_obj_t *parent_obj = obj;
                 {
                     lv_obj_t *obj = lv_label_create(parent_obj);
-                    objects.obj5 = obj;
+                    objects.obj8 = obj;
                     lv_obj_set_pos(obj, 0, 0);
                     lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
                     lv_label_set_text(obj, "");
@@ -262,12 +307,15 @@ void create_screen_main() {
             // labelTime
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.label_time = obj;
-            lv_obj_set_pos(obj, 19, 196);
-            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
-            lv_label_set_text(obj, "00:00:00");
+            lv_obj_set_pos(obj, 17, 197);
+            lv_obj_set_size(obj, LV_PCT(50), 42);
+            lv_label_set_text(obj, "");
+            lv_obj_add_event_cb(obj, event_handler_cb_main_label_time, LV_EVENT_ALL, flowState);
+            lv_obj_add_flag(obj, LV_OBJ_FLAG_CLICKABLE);
             lv_obj_set_style_text_font(obj, &lv_font_montserrat_34, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_letter_space(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_opa(obj, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
         }
         {
             // panelTarget
@@ -298,7 +346,7 @@ void create_screen_main() {
                 }
                 {
                     lv_obj_t *obj = lv_label_create(parent_obj);
-                    objects.obj6 = obj;
+                    objects.obj9 = obj;
                     lv_obj_set_pos(obj, -7, 13);
                     lv_obj_set_size(obj, 100, 18);
                     lv_label_set_text(obj, "");
@@ -309,7 +357,7 @@ void create_screen_main() {
         }
         {
             lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.obj7 = obj;
+            objects.obj10 = obj;
             lv_obj_set_pos(obj, 373, 52);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_label_set_text(obj, "");
@@ -391,7 +439,7 @@ void create_screen_main() {
                 lv_obj_t *parent_obj = obj;
                 {
                     lv_obj_t *obj = lv_label_create(parent_obj);
-                    objects.obj3 = obj;
+                    objects.obj6 = obj;
                     lv_obj_set_pos(obj, 0, 0);
                     lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
                     lv_label_set_text(obj, "");
@@ -414,7 +462,7 @@ void create_screen_main() {
                 lv_obj_t *parent_obj = obj;
                 {
                     lv_obj_t *obj = lv_label_create(parent_obj);
-                    objects.obj4 = obj;
+                    objects.obj7 = obj;
                     lv_obj_set_pos(obj, 0, 0);
                     lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
                     lv_label_set_text(obj, "");
@@ -440,10 +488,10 @@ void tick_screen_main() {
     }
     {
         const char *new_val = evalTextProperty(flowState, 4, 3, "Failed to evaluate Text in Label widget");
-        const char *cur_val = lv_label_get_text(objects.obj5);
+        const char *cur_val = lv_label_get_text(objects.obj8);
         if (strcmp(new_val, cur_val) != 0) {
-            tick_value_change_obj = objects.obj5;
-            lv_label_set_text(objects.obj5, new_val);
+            tick_value_change_obj = objects.obj8;
+            lv_label_set_text(objects.obj8, new_val);
             tick_value_change_obj = NULL;
         }
     }
@@ -504,6 +552,15 @@ void tick_screen_main() {
         }
     }
     {
+        const char *new_val = evalTextProperty(flowState, 15, 3, "Failed to evaluate Text in Label widget");
+        const char *cur_val = lv_label_get_text(objects.label_time);
+        if (strcmp(new_val, cur_val) != 0) {
+            tick_value_change_obj = objects.label_time;
+            lv_label_set_text(objects.label_time, new_val);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
         const char *new_val = evalTextProperty(flowState, 17, 3, "Failed to evaluate Text in Label widget");
         const char *cur_val = lv_label_get_text(objects.label_target);
         if (strcmp(new_val, cur_val) != 0) {
@@ -514,19 +571,19 @@ void tick_screen_main() {
     }
     {
         const char *new_val = evalTextProperty(flowState, 19, 3, "Failed to evaluate Text in Label widget");
-        const char *cur_val = lv_label_get_text(objects.obj6);
+        const char *cur_val = lv_label_get_text(objects.obj9);
         if (strcmp(new_val, cur_val) != 0) {
-            tick_value_change_obj = objects.obj6;
-            lv_label_set_text(objects.obj6, new_val);
+            tick_value_change_obj = objects.obj9;
+            lv_label_set_text(objects.obj9, new_val);
             tick_value_change_obj = NULL;
         }
     }
     {
         const char *new_val = evalTextProperty(flowState, 20, 3, "Failed to evaluate Text in Label widget");
-        const char *cur_val = lv_label_get_text(objects.obj7);
+        const char *cur_val = lv_label_get_text(objects.obj10);
         if (strcmp(new_val, cur_val) != 0) {
-            tick_value_change_obj = objects.obj7;
-            lv_label_set_text(objects.obj7, new_val);
+            tick_value_change_obj = objects.obj10;
+            lv_label_set_text(objects.obj10, new_val);
             tick_value_change_obj = NULL;
         }
     }
@@ -570,10 +627,10 @@ void tick_screen_main() {
     }
     {
         const char *new_val = evalTextProperty(flowState, 28, 3, "Failed to evaluate Text in Label widget");
-        const char *cur_val = lv_label_get_text(objects.obj3);
+        const char *cur_val = lv_label_get_text(objects.obj6);
         if (strcmp(new_val, cur_val) != 0) {
-            tick_value_change_obj = objects.obj3;
-            lv_label_set_text(objects.obj3, new_val);
+            tick_value_change_obj = objects.obj6;
+            lv_label_set_text(objects.obj6, new_val);
             tick_value_change_obj = NULL;
         }
     }
@@ -589,10 +646,10 @@ void tick_screen_main() {
     }
     {
         const char *new_val = evalTextProperty(flowState, 30, 3, "Failed to evaluate Text in Label widget");
-        const char *cur_val = lv_label_get_text(objects.obj4);
+        const char *cur_val = lv_label_get_text(objects.obj7);
         if (strcmp(new_val, cur_val) != 0) {
-            tick_value_change_obj = objects.obj4;
-            lv_label_set_text(objects.obj4, new_val);
+            tick_value_change_obj = objects.obj7;
+            lv_label_set_text(objects.obj7, new_val);
             tick_value_change_obj = NULL;
         }
     }
@@ -615,7 +672,7 @@ void create_screen_set_target() {
         }
         {
             lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.obj8 = obj;
+            objects.obj11 = obj;
             lv_obj_set_pos(obj, 33, 36);
             lv_obj_set_size(obj, LV_PCT(80), 24);
             lv_label_set_text(obj, "");
@@ -633,7 +690,7 @@ void create_screen_set_target() {
                 lv_obj_t *parent_obj = obj;
                 {
                     lv_obj_t *obj = lv_label_create(parent_obj);
-                    objects.obj9 = obj;
+                    objects.obj12 = obj;
                     lv_obj_set_pos(obj, 0, 0);
                     lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
                     lv_label_set_text(obj, "");
@@ -653,7 +710,7 @@ void create_screen_set_target() {
                 lv_obj_t *parent_obj = obj;
                 {
                     lv_obj_t *obj = lv_label_create(parent_obj);
-                    objects.obj10 = obj;
+                    objects.obj13 = obj;
                     lv_obj_set_pos(obj, 0, 0);
                     lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
                     lv_label_set_text(obj, "");
@@ -670,7 +727,7 @@ void create_screen_set_target() {
         }
         {
             lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.obj11 = obj;
+            objects.obj14 = obj;
             lv_obj_set_pos(obj, 34, 92);
             lv_obj_set_size(obj, LV_PCT(80), 45);
             lv_label_set_text(obj, "");
@@ -684,28 +741,28 @@ void tick_screen_set_target() {
     void *flowState = getFlowState(0, 1);
     {
         const char *new_val = evalTextProperty(flowState, 2, 3, "Failed to evaluate Text in Label widget");
-        const char *cur_val = lv_label_get_text(objects.obj8);
+        const char *cur_val = lv_label_get_text(objects.obj11);
         if (strcmp(new_val, cur_val) != 0) {
-            tick_value_change_obj = objects.obj8;
-            lv_label_set_text(objects.obj8, new_val);
+            tick_value_change_obj = objects.obj11;
+            lv_label_set_text(objects.obj11, new_val);
             tick_value_change_obj = NULL;
         }
     }
     {
         const char *new_val = evalTextProperty(flowState, 4, 3, "Failed to evaluate Text in Label widget");
-        const char *cur_val = lv_label_get_text(objects.obj9);
+        const char *cur_val = lv_label_get_text(objects.obj12);
         if (strcmp(new_val, cur_val) != 0) {
-            tick_value_change_obj = objects.obj9;
-            lv_label_set_text(objects.obj9, new_val);
+            tick_value_change_obj = objects.obj12;
+            lv_label_set_text(objects.obj12, new_val);
             tick_value_change_obj = NULL;
         }
     }
     {
         const char *new_val = evalTextProperty(flowState, 6, 3, "Failed to evaluate Text in Label widget");
-        const char *cur_val = lv_label_get_text(objects.obj10);
+        const char *cur_val = lv_label_get_text(objects.obj13);
         if (strcmp(new_val, cur_val) != 0) {
-            tick_value_change_obj = objects.obj10;
-            lv_label_set_text(objects.obj10, new_val);
+            tick_value_change_obj = objects.obj13;
+            lv_label_set_text(objects.obj13, new_val);
             tick_value_change_obj = NULL;
         }
     }
@@ -720,10 +777,125 @@ void tick_screen_set_target() {
     }
     {
         const char *new_val = evalTextProperty(flowState, 8, 3, "Failed to evaluate Text in Label widget");
-        const char *cur_val = lv_label_get_text(objects.obj11);
+        const char *cur_val = lv_label_get_text(objects.obj14);
         if (strcmp(new_val, cur_val) != 0) {
-            tick_value_change_obj = objects.obj11;
-            lv_label_set_text(objects.obj11, new_val);
+            tick_value_change_obj = objects.obj14;
+            lv_label_set_text(objects.obj14, new_val);
+            tick_value_change_obj = NULL;
+        }
+    }
+}
+
+void create_screen_set_timer() {
+    void *flowState = getFlowState(0, 2);
+    lv_obj_t *obj = lv_obj_create(0);
+    objects.set_timer = obj;
+    lv_obj_set_pos(obj, 0, 0);
+    lv_obj_set_size(obj, 320, 240);
+    {
+        lv_obj_t *parent_obj = obj;
+        {
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            lv_obj_set_pos(obj, 107, 11);
+            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+            lv_label_set_text(obj, "SET TIMER");
+            add_style_target(obj);
+            lv_obj_set_style_text_font(obj, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+        }
+        {
+            lv_obj_t *obj = lv_btn_create(parent_obj);
+            objects.obj3 = obj;
+            lv_obj_set_pos(obj, 221, 185);
+            lv_obj_set_size(obj, 90, 50);
+            lv_obj_add_event_cb(obj, event_handler_cb_set_timer_obj3, LV_EVENT_ALL, flowState);
+            add_style_button_ok_cancel(obj);
+            {
+                lv_obj_t *parent_obj = obj;
+                {
+                    lv_obj_t *obj = lv_label_create(parent_obj);
+                    objects.obj15 = obj;
+                    lv_obj_set_pos(obj, 0, 0);
+                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+                    lv_label_set_text(obj, "");
+                    lv_obj_set_style_align(obj, LV_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+                }
+            }
+        }
+        {
+            lv_obj_t *obj = lv_btn_create(parent_obj);
+            objects.obj4 = obj;
+            lv_obj_set_pos(obj, 10, 185);
+            lv_obj_set_size(obj, 90, 50);
+            lv_obj_add_event_cb(obj, event_handler_cb_set_timer_obj4, LV_EVENT_ALL, flowState);
+            add_style_button_ok_cancel(obj);
+            lv_obj_set_style_bg_color(obj, lv_color_hex(0xffff7800), LV_PART_MAIN | LV_STATE_DEFAULT);
+            {
+                lv_obj_t *parent_obj = obj;
+                {
+                    lv_obj_t *obj = lv_label_create(parent_obj);
+                    objects.obj16 = obj;
+                    lv_obj_set_pos(obj, 0, 0);
+                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+                    lv_label_set_text(obj, "");
+                    lv_obj_set_style_align(obj, LV_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+                }
+            }
+        }
+        {
+            lv_obj_t *obj = lv_slider_create(parent_obj);
+            objects.obj5 = obj;
+            lv_obj_set_pos(obj, 10, 148);
+            lv_obj_set_size(obj, 301, 10);
+            lv_slider_set_range(obj, 1, 20);
+            lv_obj_add_event_cb(obj, event_handler_cb_set_timer_obj5, LV_EVENT_ALL, flowState);
+        }
+        {
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            objects.obj17 = obj;
+            lv_obj_set_pos(obj, 34, 92);
+            lv_obj_set_size(obj, LV_PCT(80), 45);
+            lv_label_set_text(obj, "");
+            add_style_target(obj);
+            lv_obj_set_style_text_font(obj, &lv_font_montserrat_38, LV_PART_MAIN | LV_STATE_DEFAULT);
+        }
+    }
+}
+
+void tick_screen_set_timer() {
+    void *flowState = getFlowState(0, 2);
+    {
+        const char *new_val = evalTextProperty(flowState, 3, 3, "Failed to evaluate Text in Label widget");
+        const char *cur_val = lv_label_get_text(objects.obj15);
+        if (strcmp(new_val, cur_val) != 0) {
+            tick_value_change_obj = objects.obj15;
+            lv_label_set_text(objects.obj15, new_val);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        const char *new_val = evalTextProperty(flowState, 5, 3, "Failed to evaluate Text in Label widget");
+        const char *cur_val = lv_label_get_text(objects.obj16);
+        if (strcmp(new_val, cur_val) != 0) {
+            tick_value_change_obj = objects.obj16;
+            lv_label_set_text(objects.obj16, new_val);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        int32_t new_val = evalIntegerProperty(flowState, 6, 3, "Failed to evaluate Value in Slider widget");
+        int32_t cur_val = lv_slider_get_value(objects.obj5);
+        if (new_val != cur_val) {
+            tick_value_change_obj = objects.obj5;
+            lv_slider_set_value(objects.obj5, new_val, LV_ANIM_OFF);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        const char *new_val = evalTextProperty(flowState, 7, 3, "Failed to evaluate Text in Label widget");
+        const char *cur_val = lv_label_get_text(objects.obj17);
+        if (strcmp(new_val, cur_val) != 0) {
+            tick_value_change_obj = objects.obj17;
+            lv_label_set_text(objects.obj17, new_val);
             tick_value_change_obj = NULL;
         }
     }
@@ -733,8 +905,8 @@ void tick_screen_set_target() {
 extern void add_style(lv_obj_t *obj, int32_t styleIndex);
 extern void remove_style(lv_obj_t *obj, int32_t styleIndex);
 
-static const char *screen_names[] = { "Main", "SetTarget" };
-static const char *object_names[] = { "main", "set_target", "button_mode", "label_wifi", "label_mqtt", "panel_target", "button_start", "button_start_1", "obj0", "obj1", "obj2", "label_mode", "button_settings", "label_humi", "label_temp", "label_time", "label_target", "cont_heater_fan", "label_pwm_heater", "label_pwm_fan", "cont_start", "obj3", "obj4", "obj5", "obj6", "obj7", "obj8", "obj9", "obj10", "obj11" };
+static const char *screen_names[] = { "Main", "SetTarget", "SetTimer" };
+static const char *object_names[] = { "main", "set_target", "set_timer", "button_mode", "label_wifi", "label_mqtt", "label_time", "panel_target", "button_start", "button_start_1", "obj0", "obj1", "obj2", "obj3", "obj4", "obj5", "label_mode", "button_settings", "label_humi", "label_temp", "label_target", "cont_heater_fan", "label_pwm_heater", "label_pwm_fan", "cont_start", "obj6", "obj7", "obj8", "obj9", "obj10", "obj11", "obj12", "obj13", "obj14", "obj15", "obj16", "obj17" };
 static const char *style_names[] = { "sensorMain", "sensorUm", "pwm", "buttonMode", "buttonMode1", "buttonMode2", "buttonMode3", "target", "ButtonOkCancel" };
 
 void create_screens() {
@@ -750,6 +922,7 @@ void create_screens() {
     
     create_screen_main();
     create_screen_set_target();
+    create_screen_set_timer();
 }
 
 typedef void (*tick_screen_func_t)();
@@ -757,6 +930,7 @@ typedef void (*tick_screen_func_t)();
 tick_screen_func_t tick_screen_funcs[] = {
     tick_screen_main,
     tick_screen_set_target,
+    tick_screen_set_timer,
 };
 
 void tick_screen(int screen_index) {
