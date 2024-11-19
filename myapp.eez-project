@@ -2094,8 +2094,8 @@
         {
           "objID": "baf35df0-55cd-4ffa-d9f9-76f14efe85bf",
           "type": "DelayActionComponent",
-          "left": 1081,
-          "top": -358,
+          "left": 1099,
+          "top": -551,
           "width": 87,
           "height": 54,
           "customInputs": [],
@@ -2105,8 +2105,8 @@
         {
           "objID": "cd308132-fb6a-42d9-c421-0b39a7c3a9d6",
           "type": "WatchVariableActionComponent",
-          "left": -671,
-          "top": -633,
+          "left": -676,
+          "top": -512,
           "width": 117,
           "height": 54,
           "customInputs": [],
@@ -2116,8 +2116,8 @@
         {
           "objID": "809c0c4e-ebd7-4e6d-b4e6-6d277f102fe6",
           "type": "SetVariableActionComponent",
-          "left": 311,
-          "top": -374,
+          "left": 499,
+          "top": -548,
           "width": 275,
           "height": 57,
           "customInputs": [],
@@ -2133,8 +2133,8 @@
         {
           "objID": "81505f6a-9622-4d6d-b1aa-2781e1e0cb43",
           "type": "IsTrueActionComponent",
-          "left": 50,
-          "top": -387,
+          "left": 357,
+          "top": -520,
           "width": 92,
           "height": 70,
           "customInputs": [],
@@ -2144,8 +2144,8 @@
         {
           "objID": "84acdaec-2156-44b2-d45b-f5ed84c9646d",
           "type": "SetVariableActionComponent",
-          "left": 636,
-          "top": -458,
+          "left": 834,
+          "top": -537,
           "width": 226,
           "height": 57,
           "customInputs": [],
@@ -2161,8 +2161,8 @@
         {
           "objID": "b1a8f682-f938-4b63-ed5a-a2a5d295d35f",
           "type": "SetVariableActionComponent",
-          "left": -477,
-          "top": -561,
+          "left": -359,
+          "top": -537,
           "width": 644,
           "height": 79,
           "customInputs": [],
@@ -2177,6 +2177,64 @@
               "objID": "eedadf33-0110-41dd-9cd5-5354a069a2d1",
               "variable": "initial_timer",
               "value": "remainingTimeSec"
+            }
+          ]
+        },
+        {
+          "objID": "7327aa0c-a2cf-4957-a9a1-f1d75b2547a9",
+          "type": "SetVariableActionComponent",
+          "left": 499,
+          "top": -437,
+          "width": 208,
+          "height": 57,
+          "customInputs": [],
+          "customOutputs": [],
+          "entries": [
+            {
+              "objID": "24f77c29-8a7d-489e-d578-c822dc9bc56b",
+              "variable": "timer",
+              "value": "initial_timer*1000"
+            }
+          ]
+        },
+        {
+          "objID": "ff99ccef-4313-41dc-ec9d-a134ffe0b595",
+          "type": "IsTrueActionComponent",
+          "left": -513,
+          "top": -607,
+          "width": 92,
+          "height": 70,
+          "customInputs": [],
+          "customOutputs": [],
+          "value": "running"
+        },
+        {
+          "objID": "421868e1-e292-4aaf-861e-0f5d368d33a7",
+          "type": "CompareActionComponent",
+          "left": 864,
+          "top": -415,
+          "width": 180,
+          "height": 70,
+          "customInputs": [],
+          "customOutputs": [],
+          "A": "remainingTimeSec",
+          "B": "0",
+          "operator": ">"
+        },
+        {
+          "objID": "20b6089a-2bb4-40c0-a5db-8ce115cdf6dd",
+          "type": "SetVariableActionComponent",
+          "left": 1199,
+          "top": -408,
+          "width": 140,
+          "height": 57,
+          "customInputs": [],
+          "customOutputs": [],
+          "entries": [
+            {
+              "objID": "7c7050c6-8c40-48c0-d8c4-2f8a016c0162",
+              "variable": "running",
+              "value": "false"
             }
           ]
         }
@@ -2337,10 +2395,38 @@
           "input": "@seqin"
         },
         {
-          "objID": "0037857b-0166-4dd6-b5f2-b964386f5bf0",
+          "objID": "125bb98d-aa56-426c-b8fb-ff03b0e70372",
           "source": "cd308132-fb6a-42d9-c421-0b39a7c3a9d6",
           "output": "variable",
+          "target": "ff99ccef-4313-41dc-ec9d-a134ffe0b595",
+          "input": "@seqin"
+        },
+        {
+          "objID": "b7883cb7-a188-4f68-9ad8-5b5b5c460b56",
+          "source": "ff99ccef-4313-41dc-ec9d-a134ffe0b595",
+          "output": "True",
           "target": "b1a8f682-f938-4b63-ed5a-a2a5d295d35f",
+          "input": "@seqin"
+        },
+        {
+          "objID": "9fa3106c-3233-4642-d16c-83ad21d9800b",
+          "source": "81505f6a-9622-4d6d-b1aa-2781e1e0cb43",
+          "output": "False",
+          "target": "7327aa0c-a2cf-4957-a9a1-f1d75b2547a9",
+          "input": "@seqin"
+        },
+        {
+          "objID": "34da61bc-c2d9-4562-b265-7f62de982433",
+          "source": "809c0c4e-ebd7-4e6d-b4e6-6d277f102fe6",
+          "output": "@seqout",
+          "target": "421868e1-e292-4aaf-861e-0f5d368d33a7",
+          "input": "@seqin"
+        },
+        {
+          "objID": "b2353b04-5731-44ef-d2dd-c63b7be73a4d",
+          "source": "421868e1-e292-4aaf-861e-0f5d368d33a7",
+          "output": "False",
+          "target": "20b6089a-2bb4-40c0-a5db-8ce115cdf6dd",
           "input": "@seqin"
         }
       ],
