@@ -980,9 +980,10 @@
               "flagScrollDirection": "",
               "scrollSnapX": "",
               "scrollSnapY": "",
-              "checkedStateType": "literal",
-              "disabledState": "((reg_mode != RegulationModes.REG_TEMP) && (reg_mode != RegulationModes.REG_HUMI))",
-              "disabledStateType": "expression",
+              "checkedState": "((reg_mode != RegulationModes.REG_TEMP) && (reg_mode != RegulationModes.REG_HUMI))",
+              "checkedStateType": "expression",
+              "disabledState": false,
+              "disabledStateType": "literal",
               "states": "",
               "localStyles": {
                 "objID": "86f57633-78d2-41b3-f2c3-e86659fe6448",
@@ -1765,11 +1766,11 @@
           "type": "IsTrueActionComponent",
           "left": 591,
           "top": 162,
-          "width": 282,
+          "width": 294,
           "height": 70,
           "customInputs": [],
           "customOutputs": [],
-          "value": "reg_mode == RegulationModes.REG_MANUAL"
+          "value": "(reg_mode == RegulationModes.REG_MANUAL)"
         },
         {
           "objID": "de7176ae-8a8c-49b7-c4c3-8f04cdea420c",

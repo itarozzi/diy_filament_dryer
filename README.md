@@ -5,9 +5,9 @@ A project based on ESP32 & TFT TouchScreen to control heater for a DIY 3D Printe
 
 For the UI  LVGL 9 and [EEZ-Studio](https://github.com/eez-open/studio) are used, with some automation done with EEZ-Flow.
 
-The controller is connected to MQTT Broker via WiFi, to send sensors and actuators data and to permit also remote control.
+The controller is connected to MQTT Broker via WiFi, to send sensors and actuators data and also to permit remote control.
 
-Node-RED is used to intercat with MQTT data and commands.
+Node-RED is used to interact with MQTT data and command and to show a dashboard.
 
 
 
