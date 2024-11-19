@@ -2094,8 +2094,8 @@
         {
           "objID": "baf35df0-55cd-4ffa-d9f9-76f14efe85bf",
           "type": "DelayActionComponent",
-          "left": 1099,
-          "top": -551,
+          "left": 1378,
+          "top": -564,
           "width": 87,
           "height": 54,
           "customInputs": [],
@@ -2144,8 +2144,8 @@
         {
           "objID": "84acdaec-2156-44b2-d45b-f5ed84c9646d",
           "type": "SetVariableActionComponent",
-          "left": 834,
-          "top": -537,
+          "left": 1113,
+          "top": -526,
           "width": 226,
           "height": 57,
           "customInputs": [],
@@ -2200,8 +2200,8 @@
         {
           "objID": "ff99ccef-4313-41dc-ec9d-a134ffe0b595",
           "type": "IsTrueActionComponent",
-          "left": -513,
-          "top": -607,
+          "left": -501,
+          "top": -528,
           "width": 92,
           "height": 70,
           "customInputs": [],
@@ -2211,8 +2211,8 @@
         {
           "objID": "421868e1-e292-4aaf-861e-0f5d368d33a7",
           "type": "CompareActionComponent",
-          "left": 864,
-          "top": -415,
+          "left": 847,
+          "top": -547,
           "width": 180,
           "height": 70,
           "customInputs": [],
@@ -2224,8 +2224,8 @@
         {
           "objID": "20b6089a-2bb4-40c0-a5db-8ce115cdf6dd",
           "type": "SetVariableActionComponent",
-          "left": 1199,
-          "top": -408,
+          "left": 1113,
+          "top": -437,
           "width": 140,
           "height": 57,
           "customInputs": [],
@@ -2237,6 +2237,19 @@
               "value": "false"
             }
           ]
+        },
+        {
+          "objID": "508e74e5-3623-4777-bf1f-ced17fb5fb1b",
+          "type": "CommentActionComponent",
+          "left": -676,
+          "top": -620,
+          "width": 435,
+          "height": 56,
+          "customInputs": [],
+          "customOutputs": [],
+          "text": "<div><!--block-->REGULATION TIMER&nbsp;</div>",
+          "collapsed": false,
+          "expandedWidth": 435
         }
       ],
       "connectionLines": [
@@ -2374,13 +2387,6 @@
           "input": "@seqin"
         },
         {
-          "objID": "be556fc1-0b68-4bce-faad-f3bd318edc03",
-          "source": "809c0c4e-ebd7-4e6d-b4e6-6d277f102fe6",
-          "output": "@seqout",
-          "target": "84acdaec-2156-44b2-d45b-f5ed84c9646d",
-          "input": "@seqin"
-        },
-        {
           "objID": "7b70377c-893e-4ad9-cbed-be099b3c0d1a",
           "source": "84acdaec-2156-44b2-d45b-f5ed84c9646d",
           "output": "@seqout",
@@ -2427,6 +2433,13 @@
           "source": "421868e1-e292-4aaf-861e-0f5d368d33a7",
           "output": "False",
           "target": "20b6089a-2bb4-40c0-a5db-8ce115cdf6dd",
+          "input": "@seqin"
+        },
+        {
+          "objID": "b832a061-960c-402a-b830-1f5aebfa7557",
+          "source": "421868e1-e292-4aaf-861e-0f5d368d33a7",
+          "output": "True",
+          "target": "84acdaec-2156-44b2-d45b-f5ed84c9646d",
           "input": "@seqin"
         }
       ],

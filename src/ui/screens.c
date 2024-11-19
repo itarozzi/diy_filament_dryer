@@ -17,7 +17,7 @@ static void event_handler_cb_main_button_mode(lv_event_t *e) {
     lv_event_code_t event = lv_event_get_code(e);
     void *flowState = lv_event_get_user_data(e);
     
-    if (event == LV_EVENT_PRESSED) {
+    if (event == LV_EVENT_CLICKED) {
         e->user_data = (void *)0;
         flowPropagateValueLVGLEvent(flowState, 0, 0, e);
     }
@@ -52,6 +52,7 @@ static void event_handler_cb_main_label_mqtt(lv_event_t *e) {
 static void event_handler_cb_main_label_time(lv_event_t *e) {
     lv_event_code_t event = lv_event_get_code(e);
     void *flowState = lv_event_get_user_data(e);
+    
     
     if (event == LV_EVENT_LONG_PRESSED) {
         e->user_data = (void *)0;
@@ -172,8 +173,8 @@ void create_screen_main() {
             // buttonMode
             lv_obj_t *obj = lv_btn_create(parent_obj);
             objects.button_mode = obj;
-            lv_obj_set_pos(obj, 3, 155);
-            lv_obj_set_size(obj, 186, 34);
+            lv_obj_set_pos(obj, 3, 197);
+            lv_obj_set_size(obj, 186, 38);
             lv_obj_add_event_cb(obj, event_handler_cb_main_button_mode, LV_EVENT_ALL, flowState);
             add_style_button_mode(obj);
             lv_obj_set_style_text_color(obj, lv_color_hex(0xffffffff), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -307,15 +308,15 @@ void create_screen_main() {
             // labelTime
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.label_time = obj;
-            lv_obj_set_pos(obj, 17, 197);
+            lv_obj_set_pos(obj, 16, 151);
             lv_obj_set_size(obj, LV_PCT(50), 42);
             lv_label_set_text(obj, "");
             lv_obj_add_event_cb(obj, event_handler_cb_main_label_time, LV_EVENT_ALL, flowState);
             lv_obj_add_flag(obj, LV_OBJ_FLAG_CLICKABLE);
             lv_obj_set_style_text_font(obj, &lv_font_montserrat_34, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_letter_space(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_opa(obj, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_opa(obj, 50, LV_PART_MAIN | LV_STATE_DISABLED);
         }
         {
             // panelTarget
@@ -453,8 +454,8 @@ void create_screen_main() {
             // buttonStart_1
             lv_obj_t *obj = lv_btn_create(parent_obj);
             objects.button_start_1 = obj;
-            lv_obj_set_pos(obj, 3, 155);
-            lv_obj_set_size(obj, 186, 34);
+            lv_obj_set_pos(obj, 3, 197);
+            lv_obj_set_size(obj, 185, 37);
             lv_obj_add_event_cb(obj, event_handler_cb_main_button_start_1, LV_EVENT_ALL, flowState);
             add_style_button_mode(obj);
             lv_obj_set_style_bg_color(obj, lv_color_hex(0xffb12309), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -477,6 +478,16 @@ void create_screen_main() {
 
 void tick_screen_main() {
     void *flowState = getFlowState(0, 0);
+    {
+        bool new_val = evalBooleanProperty(flowState, 0, 3, "Failed to evaluate Hidden flag");
+        bool cur_val = lv_obj_has_flag(objects.button_mode, LV_OBJ_FLAG_HIDDEN);
+        if (new_val != cur_val) {
+            tick_value_change_obj = objects.button_mode;
+            if (new_val) lv_obj_add_flag(objects.button_mode, LV_OBJ_FLAG_HIDDEN);
+            else lv_obj_clear_flag(objects.button_mode, LV_OBJ_FLAG_HIDDEN);
+            tick_value_change_obj = NULL;
+        }
+    }
     {
         const char *new_val = evalTextProperty(flowState, 2, 3, "Failed to evaluate Text in Label widget");
         const char *cur_val = lv_label_get_text(objects.label_mode);
@@ -552,7 +563,17 @@ void tick_screen_main() {
         }
     }
     {
-        const char *new_val = evalTextProperty(flowState, 15, 3, "Failed to evaluate Text in Label widget");
+        bool new_val = evalBooleanProperty(flowState, 15, 3, "Failed to evaluate Disabled state");
+        bool cur_val = lv_obj_has_state(objects.label_time, LV_STATE_DISABLED);
+        if (new_val != cur_val) {
+            tick_value_change_obj = objects.label_time;
+            if (new_val) lv_obj_add_state(objects.label_time, LV_STATE_DISABLED);
+            else lv_obj_clear_state(objects.label_time, LV_STATE_DISABLED);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        const char *new_val = evalTextProperty(flowState, 15, 4, "Failed to evaluate Text in Label widget");
         const char *cur_val = lv_label_get_text(objects.label_time);
         if (strcmp(new_val, cur_val) != 0) {
             tick_value_change_obj = objects.label_time;
