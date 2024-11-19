@@ -972,6 +972,7 @@
               "heightUnit": "px",
               "children": [],
               "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlag": false,
               "hiddenFlagType": "literal",
               "clickableFlag": true,
               "clickableFlagType": "literal",
@@ -980,7 +981,7 @@
               "scrollSnapX": "",
               "scrollSnapY": "",
               "checkedStateType": "literal",
-              "disabledState": "(reg_mode != RegulationModes.REG_TEMP) && (reg_mode != RegulationModes.REG_HUMI)",
+              "disabledState": "((reg_mode != RegulationModes.REG_TEMP) && (reg_mode != RegulationModes.REG_HUMI))",
               "disabledStateType": "expression",
               "states": "",
               "localStyles": {
@@ -1764,11 +1765,11 @@
           "type": "IsTrueActionComponent",
           "left": 591,
           "top": 162,
-          "width": 276,
+          "width": 282,
           "height": 70,
           "customInputs": [],
           "customOutputs": [],
-          "value": "reg_mode > RegulationModes.REG_MANUAL"
+          "value": "reg_mode == RegulationModes.REG_MANUAL"
         },
         {
           "objID": "de7176ae-8a8c-49b7-c4c3-8f04cdea420c",
@@ -2056,13 +2057,13 @@
         {
           "objID": "5d0be359-5dd3-476c-f04f-0a94e04f8c7e",
           "type": "IsTrueActionComponent",
-          "left": 217,
+          "left": 250,
           "top": 624,
-          "width": 540,
+          "width": 552,
           "height": 70,
           "customInputs": [],
           "customOutputs": [],
-          "value": "(reg_mode == RegulationModes.REG_TEMP) || (reg_mode == RegulationModes.REG_HUMI)"
+          "value": "((reg_mode == RegulationModes.REG_TEMP) || (reg_mode == RegulationModes.REG_HUMI))"
         },
         {
           "objID": "45a883d0-69f1-4be2-c428-f262b7be6145",
