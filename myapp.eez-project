@@ -283,9 +283,9 @@
               "objID": "38875647-f28f-44b7-ca33-6ac8bac1bab7",
               "type": "LVGLButtonWidget",
               "left": 3,
-              "top": 155,
+              "top": 197,
               "width": 186,
-              "height": 34,
+              "height": 38,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -298,7 +298,7 @@
               "eventHandlers": [
                 {
                   "objID": "a2c9b8eb-f53b-4038-8c85-096d4c5f758e",
-                  "eventName": "PRESSED",
+                  "eventName": "CLICKED",
                   "handlerType": "flow",
                   "userData": 0
                 }
@@ -363,7 +363,8 @@
                 }
               ],
               "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_ON_FOCUS|SCROLL_WITH_ARROW|SNAPPABLE",
-              "hiddenFlagType": "literal",
+              "hiddenFlag": "running",
+              "hiddenFlagType": "expression",
               "clickableFlag": true,
               "clickableFlagType": "literal",
               "flagScrollbarMode": "",
@@ -944,8 +945,8 @@
             {
               "objID": "3d7d9d7f-bada-449f-f68c-99dbdd5e4875",
               "type": "LVGLLabelWidget",
-              "left": 17,
-              "top": 197,
+              "left": 16,
+              "top": 151,
               "width": 50,
               "height": 42,
               "customInputs": [],
@@ -980,10 +981,10 @@
               "flagScrollDirection": "",
               "scrollSnapX": "",
               "scrollSnapY": "",
-              "checkedState": "((reg_mode != RegulationModes.REG_TEMP) && (reg_mode != RegulationModes.REG_HUMI))",
-              "checkedStateType": "expression",
-              "disabledState": false,
-              "disabledStateType": "literal",
+              "checkedState": "",
+              "checkedStateType": "literal",
+              "disabledState": "((reg_mode != RegulationModes.REG_TEMP) && (reg_mode != RegulationModes.REG_HUMI))",
+              "disabledStateType": "expression",
               "states": "",
               "localStyles": {
                 "objID": "86f57633-78d2-41b3-f2c3-e86659fe6448",
@@ -1519,7 +1520,7 @@
             {
               "objID": "3bd4709c-e91b-4ef4-8525-3f55ea15e5df",
               "type": "LVGLButtonWidget",
-              "left": 194,
+              "left": 203,
               "top": 78,
               "width": 112,
               "height": 70,
@@ -1627,9 +1628,9 @@
               "objID": "688d89d7-1ae8-4c5c-86b4-c766aed5920b",
               "type": "LVGLButtonWidget",
               "left": 3,
-              "top": 155,
-              "width": 186,
-              "height": 34,
+              "top": 197,
+              "width": 185,
+              "height": 37,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -2089,13 +2090,102 @@
               "delayType": "literal"
             }
           ]
+        },
+        {
+          "objID": "baf35df0-55cd-4ffa-d9f9-76f14efe85bf",
+          "type": "DelayActionComponent",
+          "left": 1081,
+          "top": -358,
+          "width": 87,
+          "height": 54,
+          "customInputs": [],
+          "customOutputs": [],
+          "milliseconds": "1000"
+        },
+        {
+          "objID": "cd308132-fb6a-42d9-c421-0b39a7c3a9d6",
+          "type": "WatchVariableActionComponent",
+          "left": -671,
+          "top": -633,
+          "width": 117,
+          "height": 54,
+          "customInputs": [],
+          "customOutputs": [],
+          "variable": "running"
+        },
+        {
+          "objID": "809c0c4e-ebd7-4e6d-b4e6-6d277f102fe6",
+          "type": "SetVariableActionComponent",
+          "left": 311,
+          "top": -374,
+          "width": 275,
+          "height": 57,
+          "customInputs": [],
+          "customOutputs": [],
+          "entries": [
+            {
+              "objID": "68ec554f-25d3-4d80-f44e-75ba9e59c19f",
+              "variable": "remainingTimeSec",
+              "value": "remainingTimeSec-1"
+            }
+          ]
+        },
+        {
+          "objID": "81505f6a-9622-4d6d-b1aa-2781e1e0cb43",
+          "type": "IsTrueActionComponent",
+          "left": 50,
+          "top": -387,
+          "width": 92,
+          "height": 70,
+          "customInputs": [],
+          "customOutputs": [],
+          "value": "running"
+        },
+        {
+          "objID": "84acdaec-2156-44b2-d45b-f5ed84c9646d",
+          "type": "SetVariableActionComponent",
+          "left": 636,
+          "top": -458,
+          "width": 226,
+          "height": 57,
+          "customInputs": [],
+          "customOutputs": [],
+          "entries": [
+            {
+              "objID": "7b598ac9-29f9-4a7d-c535-ee735dc2d8d4",
+              "variable": "timer",
+              "value": "remainingTimeSec*1000"
+            }
+          ]
+        },
+        {
+          "objID": "b1a8f682-f938-4b63-ed5a-a2a5d295d35f",
+          "type": "SetVariableActionComponent",
+          "left": -477,
+          "top": -561,
+          "width": 644,
+          "height": 79,
+          "customInputs": [],
+          "customOutputs": [],
+          "entries": [
+            {
+              "objID": "5fd36da6-1902-4f80-d9d3-f77d7bbec4ba",
+              "variable": "remainingTimeSec",
+              "value": "Date.getSeconds(timer) + Date.getMinutes(timer)*60 + Date.getHours(timer)*3600"
+            },
+            {
+              "objID": "eedadf33-0110-41dd-9cd5-5354a069a2d1",
+              "variable": "initial_timer",
+              "value": "remainingTimeSec"
+            }
+          ]
         }
       ],
       "connectionLines": [
         {
           "objID": "6c8e9957-0047-4c7e-dc6e-dee68d75047d",
           "source": "38875647-f28f-44b7-ca33-6ac8bac1bab7",
-          "output": "PRESSED",
+          "output": "CLICKED",
           "target": "bc9ad070-de59-44f5-a068-1409c2e555ae",
           "input": "@seqin"
         },
@@ -2210,6 +2300,48 @@
           "output": "True",
           "target": "45a883d0-69f1-4be2-c428-f262b7be6145",
           "input": "@seqin"
+        },
+        {
+          "objID": "a571c029-4ce3-41c3-b570-93d9e52a934b",
+          "source": "81505f6a-9622-4d6d-b1aa-2781e1e0cb43",
+          "output": "True",
+          "target": "809c0c4e-ebd7-4e6d-b4e6-6d277f102fe6",
+          "input": "@seqin"
+        },
+        {
+          "objID": "6c8c1ccb-4446-47ca-d1b1-236ee346f79e",
+          "source": "baf35df0-55cd-4ffa-d9f9-76f14efe85bf",
+          "output": "@seqout",
+          "target": "81505f6a-9622-4d6d-b1aa-2781e1e0cb43",
+          "input": "@seqin"
+        },
+        {
+          "objID": "be556fc1-0b68-4bce-faad-f3bd318edc03",
+          "source": "809c0c4e-ebd7-4e6d-b4e6-6d277f102fe6",
+          "output": "@seqout",
+          "target": "84acdaec-2156-44b2-d45b-f5ed84c9646d",
+          "input": "@seqin"
+        },
+        {
+          "objID": "7b70377c-893e-4ad9-cbed-be099b3c0d1a",
+          "source": "84acdaec-2156-44b2-d45b-f5ed84c9646d",
+          "output": "@seqout",
+          "target": "baf35df0-55cd-4ffa-d9f9-76f14efe85bf",
+          "input": "@seqin"
+        },
+        {
+          "objID": "c1306641-485f-4f74-90dc-b29a1ac87e81",
+          "source": "b1a8f682-f938-4b63-ed5a-a2a5d295d35f",
+          "output": "@seqout",
+          "target": "81505f6a-9622-4d6d-b1aa-2781e1e0cb43",
+          "input": "@seqin"
+        },
+        {
+          "objID": "0037857b-0166-4dd6-b5f2-b964386f5bf0",
+          "source": "cd308132-fb6a-42d9-c421-0b39a7c3a9d6",
+          "output": "variable",
+          "target": "b1a8f682-f938-4b63-ed5a-a2a5d295d35f",
+          "input": "@seqin"
         }
       ],
       "localVariables": [
@@ -2218,6 +2350,14 @@
           "name": "button_mode_style",
           "type": "string",
           "defaultValue": "\"buttonMode\"",
+          "persistent": false,
+          "native": false
+        },
+        {
+          "objID": "98c03b5e-16ff-42db-b07e-cb0d9578fd12",
+          "name": "initial_timer",
+          "type": "double",
+          "defaultValue": "0",
           "persistent": false,
           "native": false
         }
