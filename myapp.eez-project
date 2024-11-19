@@ -980,7 +980,8 @@
               "scrollSnapX": "",
               "scrollSnapY": "",
               "checkedStateType": "literal",
-              "disabledStateType": "literal",
+              "disabledState": "(reg_mode != RegulationModes.REG_TEMP) && (reg_mode != RegulationModes.REG_HUMI)",
+              "disabledStateType": "expression",
               "states": "",
               "localStyles": {
                 "objID": "86f57633-78d2-41b3-f2c3-e86659fe6448",
@@ -989,8 +990,10 @@
                     "DEFAULT": {
                       "text_font": "MONTSERRAT_34",
                       "text_letter_space": 0,
-                      "opa": 50,
                       "text_align": "CENTER"
+                    },
+                    "DISABLED": {
+                      "opa": 50
                     }
                   }
                 }
@@ -1514,7 +1517,7 @@
             {
               "objID": "3bd4709c-e91b-4ef4-8525-3f55ea15e5df",
               "type": "LVGLButtonWidget",
-              "left": 203,
+              "left": 194,
               "top": 78,
               "width": 112,
               "height": 70,
@@ -1759,19 +1762,19 @@
         {
           "objID": "049b8643-408b-49b9-9a1f-a3f2d931ec68",
           "type": "IsTrueActionComponent",
-          "left": 562,
-          "top": 159,
-          "width": 282,
+          "left": 591,
+          "top": 162,
+          "width": 276,
           "height": 70,
           "customInputs": [],
           "customOutputs": [],
-          "value": "reg_mode == RegulationModes.REG_MANUAL"
+          "value": "reg_mode > RegulationModes.REG_MANUAL"
         },
         {
           "objID": "de7176ae-8a8c-49b7-c4c3-8f04cdea420c",
           "type": "SetVariableActionComponent",
-          "left": 888,
-          "top": 94,
+          "left": 918,
+          "top": 95,
           "width": 257,
           "height": 57,
           "customInputs": [],
