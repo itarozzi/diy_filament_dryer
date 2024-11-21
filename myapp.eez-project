@@ -1539,6 +1539,12 @@
                   "eventName": "LONG_PRESSED",
                   "handlerType": "flow",
                   "userData": 0
+                },
+                {
+                  "objID": "4de4d6bf-44b5-4661-f765-e99e6ae67fc8",
+                  "eventName": "SHORT_CLICKED",
+                  "handlerType": "flow",
+                  "userData": 0
                 }
               ],
               "identifier": "buttonStart",
@@ -1628,7 +1634,7 @@
               "objID": "688d89d7-1ae8-4c5c-86b4-c766aed5920b",
               "type": "LVGLButtonWidget",
               "left": 3,
-              "top": 197,
+              "top": 198,
               "width": 185,
               "height": 37,
               "customInputs": [],
@@ -1641,6 +1647,12 @@
               },
               "timeline": [],
               "eventHandlers": [
+                {
+                  "objID": "181d4a4e-91f2-4ee9-d613-3df4265758dd",
+                  "eventName": "SHORT_CLICKED",
+                  "handlerType": "flow",
+                  "userData": 0
+                },
                 {
                   "objID": "f5122be7-8b48-4ca0-c7e0-472a3d5bb242",
                   "eventName": "LONG_PRESSED",
@@ -1725,6 +1737,113 @@
                   "MAIN": {
                     "DEFAULT": {
                       "bg_color": "#b12309"
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0
+            },
+            {
+              "objID": "6f2d233d-1741-406d-c5fa-3fad5337f3ad",
+              "type": "LVGLMessageBoxWidget",
+              "left": 33,
+              "top": 73,
+              "width": 256,
+              "height": 97,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "7c4506fd-1909-427a-c7da-3b355be67d21",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [
+                {
+                  "objID": "39cb0db8-98b3-4182-89b1-ca401286a73f",
+                  "eventName": "CHECKED",
+                  "handlerType": "flow",
+                  "userData": 0
+                }
+              ],
+              "identifier": "msgboxLongPress",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "px",
+              "heightUnit": "px",
+              "children": [
+                {
+                  "objID": "67290d45-d524-4086-96ce-b56caf33697f",
+                  "type": "LVGLLabelWidget",
+                  "left": 2,
+                  "top": 96,
+                  "width": 100,
+                  "height": 100,
+                  "customInputs": [],
+                  "customOutputs": [],
+                  "style": {
+                    "objID": "fecf89e1-f13e-43e9-9e31-8905ea130af3",
+                    "useStyle": "default",
+                    "conditionalStyles": [],
+                    "childStyles": []
+                  },
+                  "timeline": [],
+                  "eventHandlers": [],
+                  "leftUnit": "px",
+                  "topUnit": "px",
+                  "widthUnit": "%",
+                  "heightUnit": "%",
+                  "children": [],
+                  "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+                  "hiddenFlagType": "literal",
+                  "clickableFlagType": "literal",
+                  "flagScrollbarMode": "",
+                  "flagScrollDirection": "",
+                  "scrollSnapX": "",
+                  "scrollSnapY": "",
+                  "checkedStateType": "literal",
+                  "disabledStateType": "literal",
+                  "states": "",
+                  "localStyles": {
+                    "objID": "66004e4f-91f7-4e33-db33-0e57521bc098",
+                    "definition": {
+                      "MAIN": {
+                        "DEFAULT": {
+                          "text_font": "MONTSERRAT_20",
+                          "text_align": "CENTER"
+                        }
+                      }
+                    }
+                  },
+                  "group": "",
+                  "groupIndex": 0,
+                  "text": "Use Long Press to operate",
+                  "textType": "literal",
+                  "longMode": "WRAP",
+                  "recolor": false
+                }
+              ],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE|CHECKABLE",
+              "hiddenFlag": true,
+              "hiddenFlagType": "literal",
+              "clickableFlag": false,
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "localStyles": {
+                "objID": "cf6abd49-c7e0-4941-ceff-27eb219b0909",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "align": "DEFAULT",
+                      "pad_top": 20
                     }
                   }
                 }
@@ -2250,6 +2369,57 @@
           "text": "<div><!--block-->REGULATION TIMER&nbsp;</div>",
           "collapsed": false,
           "expandedWidth": 435
+        },
+        {
+          "objID": "e4ca7282-7c09-4747-83df-bc9a1081e2b4",
+          "type": "LVGLActionComponent",
+          "left": 873,
+          "top": -168,
+          "width": 262,
+          "height": 54,
+          "customInputs": [],
+          "customOutputs": [],
+          "actions": [
+            {
+              "objID": "658e45e6-55e2-418b-c397-146f279525be",
+              "action": "objSetFlagHidden",
+              "object": "msgbox_long_press",
+              "objectType": "literal",
+              "hidden": true,
+              "hiddenType": "literal"
+            }
+          ]
+        },
+        {
+          "objID": "e29349b0-63dc-4beb-d222-8acfe6b8e1ea",
+          "type": "DelayActionComponent",
+          "left": 740,
+          "top": -168,
+          "width": 87,
+          "height": 54,
+          "customInputs": [],
+          "customOutputs": [],
+          "milliseconds": "1500"
+        },
+        {
+          "objID": "aa2b9fcf-5974-46ff-dc61-c8f082205f28",
+          "type": "LVGLActionComponent",
+          "left": 449,
+          "top": -168,
+          "width": 268,
+          "height": 54,
+          "customInputs": [],
+          "customOutputs": [],
+          "actions": [
+            {
+              "objID": "934f63f0-d607-489d-9237-db6a1045e15a",
+              "action": "objSetFlagHidden",
+              "object": "msgbox_long_press",
+              "objectType": "literal",
+              "hidden": false,
+              "hiddenType": "literal"
+            }
+          ]
         }
       ],
       "connectionLines": [
@@ -2440,6 +2610,34 @@
           "source": "421868e1-e292-4aaf-861e-0f5d368d33a7",
           "output": "True",
           "target": "84acdaec-2156-44b2-d45b-f5ed84c9646d",
+          "input": "@seqin"
+        },
+        {
+          "objID": "5954906a-90d9-4488-fe81-e9d0bbab7bbc",
+          "source": "e29349b0-63dc-4beb-d222-8acfe6b8e1ea",
+          "output": "@seqout",
+          "target": "e4ca7282-7c09-4747-83df-bc9a1081e2b4",
+          "input": "@seqin"
+        },
+        {
+          "objID": "95cacd61-c13c-47b9-cd82-c28d4ef63f7e",
+          "source": "3bd4709c-e91b-4ef4-8525-3f55ea15e5df",
+          "output": "SHORT_CLICKED",
+          "target": "aa2b9fcf-5974-46ff-dc61-c8f082205f28",
+          "input": "@seqin"
+        },
+        {
+          "objID": "a83312ad-48d2-4496-9352-eec186537b29",
+          "source": "aa2b9fcf-5974-46ff-dc61-c8f082205f28",
+          "output": "@seqout",
+          "target": "e29349b0-63dc-4beb-d222-8acfe6b8e1ea",
+          "input": "@seqin"
+        },
+        {
+          "objID": "4f6f8b2b-1e71-4860-f1fe-a4a63cc489b3",
+          "source": "688d89d7-1ae8-4c5c-86b4-c766aed5920b",
+          "output": "SHORT_CLICKED",
+          "target": "aa2b9fcf-5974-46ff-dc61-c8f082205f28",
           "input": "@seqin"
         }
       ],

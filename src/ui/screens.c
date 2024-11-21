@@ -78,15 +78,34 @@ static void event_handler_cb_main_button_start(lv_event_t *e) {
         e->user_data = (void *)0;
         flowPropagateValueLVGLEvent(flowState, 27, 0, e);
     }
+    if (event == LV_EVENT_SHORT_CLICKED) {
+        e->user_data = (void *)0;
+        flowPropagateValueLVGLEvent(flowState, 27, 1, e);
+    }
 }
 
 static void event_handler_cb_main_button_start_1(lv_event_t *e) {
     lv_event_code_t event = lv_event_get_code(e);
     void *flowState = lv_event_get_user_data(e);
     
-    if (event == LV_EVENT_LONG_PRESSED) {
+    if (event == LV_EVENT_SHORT_CLICKED) {
         e->user_data = (void *)0;
         flowPropagateValueLVGLEvent(flowState, 29, 0, e);
+    }
+    if (event == LV_EVENT_LONG_PRESSED) {
+        e->user_data = (void *)0;
+        flowPropagateValueLVGLEvent(flowState, 29, 1, e);
+    }
+}
+
+static void event_handler_cb_main_msgbox_long_press(lv_event_t *e) {
+    lv_event_code_t event = lv_event_get_code(e);
+    void *flowState = lv_event_get_user_data(e);
+    
+    lv_obj_t *ta = lv_event_get_target(e);
+    if (event == LV_EVENT_VALUE_CHANGED && lv_obj_has_state(ta, LV_STATE_CHECKED)) {
+        e->user_data = (void *)0;
+        flowPropagateValueLVGLEvent(flowState, 31, 0, e);
     }
 }
 
@@ -454,7 +473,7 @@ void create_screen_main() {
             // buttonStart_1
             lv_obj_t *obj = lv_btn_create(parent_obj);
             objects.button_start_1 = obj;
-            lv_obj_set_pos(obj, 3, 197);
+            lv_obj_set_pos(obj, 3, 198);
             lv_obj_set_size(obj, 185, 37);
             lv_obj_add_event_cb(obj, event_handler_cb_main_button_start_1, LV_EVENT_ALL, flowState);
             add_style_button_mode(obj);
@@ -470,6 +489,29 @@ void create_screen_main() {
                     lv_obj_set_style_align(obj, LV_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
                     lv_obj_set_style_text_font(obj, &lv_font_montserrat_26, LV_PART_MAIN | LV_STATE_DEFAULT);
                     lv_obj_set_style_text_color(obj, lv_color_hex(0xffc5c5c5), LV_PART_MAIN | LV_STATE_DEFAULT);
+                }
+            }
+        }
+        {
+            // msgboxLongPress
+            lv_obj_t *obj = lv_msgbox_create(parent_obj);
+            objects.msgbox_long_press = obj;
+            lv_obj_set_pos(obj, 33, 73);
+            lv_obj_set_size(obj, 256, 97);
+            lv_obj_add_event_cb(obj, event_handler_cb_main_msgbox_long_press, LV_EVENT_ALL, flowState);
+            lv_obj_add_flag(obj, LV_OBJ_FLAG_CHECKABLE|LV_OBJ_FLAG_HIDDEN);
+            lv_obj_clear_flag(obj, LV_OBJ_FLAG_CLICKABLE);
+            lv_obj_set_style_align(obj, LV_ALIGN_DEFAULT, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_pad_top(obj, 20, LV_PART_MAIN | LV_STATE_DEFAULT);
+            {
+                lv_obj_t *parent_obj = obj;
+                {
+                    lv_obj_t *obj = lv_label_create(parent_obj);
+                    lv_obj_set_pos(obj, 2, 96);
+                    lv_obj_set_size(obj, LV_PCT(100), LV_PCT(100));
+                    lv_label_set_text(obj, "Use Long Press to operate");
+                    lv_obj_set_style_text_font(obj, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
                 }
             }
         }
@@ -927,7 +969,7 @@ extern void add_style(lv_obj_t *obj, int32_t styleIndex);
 extern void remove_style(lv_obj_t *obj, int32_t styleIndex);
 
 static const char *screen_names[] = { "Main", "SetTarget", "SetTimer" };
-static const char *object_names[] = { "main", "set_target", "set_timer", "button_mode", "label_wifi", "label_mqtt", "label_time", "panel_target", "button_start", "button_start_1", "obj0", "obj1", "obj2", "obj3", "obj4", "obj5", "label_mode", "button_settings", "label_humi", "label_temp", "label_target", "cont_heater_fan", "label_pwm_heater", "label_pwm_fan", "cont_start", "obj6", "obj7", "obj8", "obj9", "obj10", "obj11", "obj12", "obj13", "obj14", "obj15", "obj16", "obj17" };
+static const char *object_names[] = { "main", "set_target", "set_timer", "button_mode", "label_wifi", "label_mqtt", "label_time", "panel_target", "button_start", "button_start_1", "msgbox_long_press", "obj0", "obj1", "obj2", "obj3", "obj4", "obj5", "label_mode", "button_settings", "label_humi", "label_temp", "label_target", "cont_heater_fan", "label_pwm_heater", "label_pwm_fan", "cont_start", "obj6", "obj7", "obj8", "obj9", "obj10", "obj11", "obj12", "obj13", "obj14", "obj15", "obj16", "obj17" };
 static const char *style_names[] = { "sensorMain", "sensorUm", "pwm", "buttonMode", "buttonMode1", "buttonMode2", "buttonMode3", "target", "ButtonOkCancel" };
 
 void create_screens() {
