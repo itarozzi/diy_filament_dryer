@@ -17,7 +17,7 @@ typedef struct _objects_t {
     lv_obj_t *label_time;
     lv_obj_t *panel_target;
     lv_obj_t *button_start;
-    lv_obj_t *button_start_1;
+    lv_obj_t *button_stop;
     lv_obj_t *msgbox_long_press;
     lv_obj_t *obj0;
     lv_obj_t *obj1;
@@ -25,6 +25,7 @@ typedef struct _objects_t {
     lv_obj_t *obj3;
     lv_obj_t *obj4;
     lv_obj_t *obj5;
+    lv_obj_t *obj6;
     lv_obj_t *label_mode;
     lv_obj_t *button_settings;
     lv_obj_t *label_humi;
@@ -34,7 +35,6 @@ typedef struct _objects_t {
     lv_obj_t *label_pwm_heater;
     lv_obj_t *label_pwm_fan;
     lv_obj_t *cont_start;
-    lv_obj_t *obj6;
     lv_obj_t *obj7;
     lv_obj_t *obj8;
     lv_obj_t *obj9;
@@ -46,6 +46,7 @@ typedef struct _objects_t {
     lv_obj_t *obj15;
     lv_obj_t *obj16;
     lv_obj_t *obj17;
+    lv_obj_t *obj18;
 } objects_t;
 
 extern objects_t objects;

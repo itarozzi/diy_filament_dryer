@@ -63,9 +63,9 @@
 #define TXPIN 22
 
 // CYD RGB LED Pins
-#define CYD_LED_RED 4
-#define CYD_LED_GREEN 16
-#define CYD_LED_BLUE 17
+// #define CYD_LED_RED 4
+// #define CYD_LED_GREEN 16
+// #define CYD_LED_BLUE 17
 
 
 
@@ -103,9 +103,9 @@ SPIClass touchscreenSPI = SPIClass(VSPI);
 XPT2046_Touchscreen touchscreen(XPT2046_CS, XPT2046_IRQ);
 
 // PWM pins
-#define HEATER_PIN 5
-#define FAN_PIN 18
-#define LED_PIN 19
+#define HEATER_PIN 15
+#define FAN_PIN 2
+#define LED_PIN 4
 
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
@@ -352,8 +352,11 @@ void lv_init_esp32(void) {
   
   // set rotation mode
   //lv_display_set_rotation(NULL, LV_DISPLAY_ROTATION_90);
-   tft.setRotation(3);  // 0 or 2 for  portrait / 1 or 3 for landscape
-
+  #ifdef TFT_INVERTED
+    tft.setRotation(1);  // 0 or 2 for  portrait / 1 or 3 for landscape
+  #else
+    tft.setRotation(3);  // 0 or 2 for  portrait / 1 or 3 for landscape
+  #endif
 
 
   // Initialize an LVGL input device object (Touchscreen)
@@ -363,8 +366,8 @@ void lv_init_esp32(void) {
   lv_indev_set_read_cb(indev, touchscreen_read);
 
 
-  // you can define TFT_INVERTED as compiler param in platformio.ini
-  #ifdef TFT_INVERTED
+  // you can define TFT_COLOR_INVERTED as compiler param in platformio.ini
+  #ifdef TFT_COLOR_INVERTED
     tft.invertDisplay(true);
   #else
     tft.invertDisplay(false);
@@ -387,7 +390,7 @@ void setup() {
   
   
   // Initialize BME280 sensor
-  // Wire.begin(0,2);                                                      // initialize I2C that connects to sensor
+  Wire.begin(21,22);                                                      // initialize I2C that connects to sensor
   BMESensor.begin();   
 
 
